@@ -15,5 +15,7 @@ namespace GradeCenter.Data.Models
         [Required]
         [StringLength(150)]
         public string Address { get; set; } = default!;
+
+        public ICollection<Headmaster> Headmasters { get; set; } = new List<Headmaster>();
     }
 }
