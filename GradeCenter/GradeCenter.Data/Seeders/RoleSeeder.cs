@@ -2,13 +2,6 @@
 {
     public class RoleSeeder : IDataSeeder
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
-
-        public RoleSeeder(RoleManager<IdentityRole> roleManager)
-        {
-            _roleManager = roleManager;
-        }
-
         public int Order => 1;
 
         public async Task Seed(DbContext context)

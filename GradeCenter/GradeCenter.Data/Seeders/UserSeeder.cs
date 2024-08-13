@@ -15,7 +15,9 @@
         {
             //Add different users
             await SeedUser(context, new Guid("EDEB7970-01CE-4DF5-A99D-70090D66379B"), new DateOnly(1980, 3, 15), "123 Admin Lane, Capital City, Country", "Alice Johnson", "admin");
+            await SeedUser(context, new Guid("A26C2C8A-D575-4C12-BB7B-E9AF1B2E79B2"), new DateOnly(1981, 4, 16), "58 Admin Avenue, Capital City, Country", "Brandon Clark", "admin");
             await SeedUser(context, new Guid("8E0D4063-0DD3-4359-B261-EBA797ECDFE6"), new DateOnly(1975, 7, 22), "45 School Drive, Education Town, Country", "Robert Thompson", "headmaster");
+            await SeedUser(context, new Guid("E7782632-7525-482C-B0B1-64C1264C8C4A"), new DateOnly(1972, 2, 14), "75 Palm Drive, Education Town, Country", "Chris Iverson", "headmaster");
             await SeedUser(context, new Guid("0D74D377-F0FC-4CC2-882A-EB6228042782"), new DateOnly(2010, 6, 12), "678 Elm Street, Suburbia, Country", "Emily Parker", "student");
             await SeedUser(context, new Guid("2CB059AC-D7B3-42AC-A41E-F9660713773F"), new DateOnly(2011, 4, 25), "12 Maple Avenue, Suburbia, Country", "Michael Brown", "student");
             await SeedUser(context, new Guid("70B90B3B-7CC4-4CE7-9313-0DA8FC23F29F"), new DateOnly(2009, 9, 30), "89 Oak Street, Suburbia, Country", "Sophia Green", "student");
