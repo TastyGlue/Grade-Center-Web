@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace GradeCenter.Data
+﻿namespace GradeCenter.Data
 {
     public class GradeCenterDbContext : IdentityDbContext<User>
     {
@@ -21,7 +19,6 @@ namespace GradeCenter.Data
         public DbSet<Absence> Absences { get; set; }
         public DbSet<Timetable> Timetables { get; set; }
         public DbSet<StudentParent> StudentParents { get; set; }
-        public DbSet<StudentSubject> StudentSubjects { get; set; }
         public DbSet<TeacherSubject> TeacherSubjects { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -31,8 +28,6 @@ namespace GradeCenter.Data
             //Creating composite keys for linking tables
             builder.Entity<StudentParent>()
                 .HasKey(sp => new { sp.StudentId, sp.ParentId });
-            builder.Entity<StudentSubject>()
-                .HasKey(sp => new { sp.StudentId, sp.SubjectId });
             builder.Entity<TeacherSubject>()
                 .HasKey(sp => new { sp.TeacherId, sp.SubjectId });
 
@@ -46,16 +41,6 @@ namespace GradeCenter.Data
                 .HasOne(sp => sp.Parent)
                 .WithMany(p => p.StudentParents)
                 .HasForeignKey(sp => sp.ParentId);
-
-            builder.Entity<StudentSubject>()
-                .HasOne(sp => sp.Student)
-                .WithMany(s => s.StudentSubjects)
-                .HasForeignKey(sp => sp.StudentId);
-
-            builder.Entity<StudentSubject>()
-                .HasOne(sp => sp.Subject)
-                .WithMany(p => p.StudentSubjects)
-                .HasForeignKey(sp => sp.SubjectId);
 
             builder.Entity<TeacherSubject>()
                 .HasOne(sp => sp.Teacher)

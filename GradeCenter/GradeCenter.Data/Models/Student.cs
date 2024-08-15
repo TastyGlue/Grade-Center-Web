@@ -22,7 +22,6 @@
         public Class Class { get; set; } = default!;
 
         public ICollection<StudentParent> StudentParents { get; set; } = new List<StudentParent>();
-        public ICollection<StudentSubject> StudentSubjects { get; set; } = new List<StudentSubject>();
 
         public ICollection<Grade> Grades { get; set; } = new List<Grade>();
         public ICollection<Absence> Absences { get; set; } = new List<Absence>();

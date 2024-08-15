@@ -1,6 +1,4 @@
-﻿using GradeCenter.Data.Models;
-
-namespace GradeCenter.Data.Seeders
+﻿namespace GradeCenter.Data.Seeders
 {
     public class ClassSeeder : IDataSeeder
     {

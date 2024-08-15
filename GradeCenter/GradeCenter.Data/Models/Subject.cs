@@ -14,7 +14,6 @@
         [StringLength(10)]
         public string Signature { get; set; } = default!;
 
-        public ICollection<StudentSubject> StudentSubjects { get; set; } = new List<StudentSubject>();
         public ICollection<TeacherSubject> TeacherSubjects { get; set; } = new List<TeacherSubject>();
     }
 }

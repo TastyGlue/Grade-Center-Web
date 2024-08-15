@@ -3,12 +3,12 @@
     public class TeacherSubject
     {
         [Required]
-        public string TeacherId { get; set; } = default!;
+        public int TeacherId { get; set; }
         [ForeignKey(nameof(TeacherId))]
         public Teacher Teacher { get; set; } = default!;
 
         [Required]
-        public string SubjectId { get; set; } = default!;
+        public Guid SubjectId { get; set; }
         [ForeignKey(nameof(SubjectId))]
         public Subject Subject { get; set; } = default!;
     }
