@@ -12,4 +12,8 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GradeCenter.Shared\GradeCenter.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

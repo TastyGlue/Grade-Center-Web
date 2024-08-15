@@ -21,5 +21,7 @@
         public int? ClassTeacherId { get; set; }
         [ForeignKey(nameof(ClassTeacherId))]
         public Teacher? ClassTeacher { get; set; }
+
+        public ICollection<Student> Students { get; set; } = new List<Student>();
     }
 }

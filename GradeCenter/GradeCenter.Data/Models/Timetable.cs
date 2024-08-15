@@ -25,14 +25,10 @@
         [StringLength(10)]
         public string Year { get; set; } = default!;
 
-        [Required]
-        [StringLength(15)]
-        public string DayOfWeek { get; set; } = default!;
+        public DayOfWeek? Day { get; set; }
 
-        [Required]
-        public TimeOnly StartTime { get; set; }
+        public DateTime? StartTime { get; set; }
 
-        [Required]
-        public TimeOnly EndTime { get; set; }
+        public DateTime? EndTime { get; set; }
     }
 }

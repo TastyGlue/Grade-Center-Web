@@ -18,6 +18,7 @@ namespace GradeCenter.Data
         public DbSet<Headmaster> Headmasters { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Grade> Grades { get; set; }
+        public DbSet<Absence> Absences { get; set; }
         public DbSet<Timetable> Timetables { get; set; }
         public DbSet<StudentParent> StudentParents { get; set; }
         public DbSet<StudentSubject> StudentSubjects { get; set; }

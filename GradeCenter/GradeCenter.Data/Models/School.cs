@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace GradeCenter.Data.Models
+﻿namespace GradeCenter.Data.Models
 {
     public class School
     {
@@ -17,5 +15,6 @@ namespace GradeCenter.Data.Models
         public string Address { get; set; } = default!;
 
         public ICollection<Headmaster> Headmasters { get; set; } = new List<Headmaster>();
+        public ICollection<Admin> Admins { get; set; } = new List<Admin>();
     }
 }
