@@ -10,8 +10,8 @@ namespace GradeCenter.Data.Seeders
             //Create data to be seeded
             var headmasters = new List<Headmaster>()
             {
-                new() { Id = 1, UserId = "8E0D4063-0DD3-4359-B261-EBA797ECDFE6", SchoolId = new Guid("5E99AC10-FB03-4305-8022-C68A632F118F") },
-                new() { Id = 2, UserId = "E7782632-7525-482C-B0B1-64C1264C8C4A", SchoolId = new Guid("24CBEE20-06B6-4726-902D-66FBBF88B804") }
+                new() { Id = 1, UserId = "8e0d4063-0dd3-4359-b261-eba797ecdfe6", SchoolId = new Guid("5e99ac10-fb03-4305-8022-c68a632f118f") },
+                new() { Id = 2, UserId = "e7782632-7525-482c-b0b1-64c1264c8c4a", SchoolId = new Guid("24cbee20-06b6-4726-902d-66fbbf88b804") }
             };
 
             foreach (var headmaster in headmasters)

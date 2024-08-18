@@ -10,11 +10,11 @@ namespace GradeCenter.Data.Seeders
             //Create data to be seeded
             var students = new List<Student>()
             {
-                new() { Id = 1, UserId = "0D74D377-F0FC-4CC2-882A-EB6228042782", SchoolId = new Guid("5E99AC10-FB03-4305-8022-C68A632F118F"), ClassId = new Guid("52761D50-5812-4FE4-A800-8FD26E6D6662") },
-                new() { Id = 2, UserId = "2CB059AC-D7B3-42AC-A41E-F9660713773F", SchoolId = new Guid("5E99AC10-FB03-4305-8022-C68A632F118F"), ClassId = new Guid("52761D50-5812-4FE4-A800-8FD26E6D6662") },
-                new() { Id = 3, UserId = "70B90B3B-7CC4-4CE7-9313-0DA8FC23F29F", SchoolId = new Guid("5E99AC10-FB03-4305-8022-C68A632F118F"), ClassId = new Guid("52761D50-5812-4FE4-A800-8FD26E6D6662") },
-                new() { Id = 4, UserId = "242CF21D-31EC-4DD7-BDCB-365B895E4FFE", SchoolId = new Guid("5E99AC10-FB03-4305-8022-C68A632F118F"), ClassId = new Guid("52761D50-5812-4FE4-A800-8FD26E6D6662") },
-                new() { Id = 5, UserId = "5BA8CB31-C401-45E9-A401-E47748FDA3C3", SchoolId = new Guid("5E99AC10-FB03-4305-8022-C68A632F118F"), ClassId = new Guid("52761D50-5812-4FE4-A800-8FD26E6D6662") },
+                new() { Id = 1, UserId = "0d74d377-f0fc-4cc2-882a-eb6228042782", SchoolId = new Guid("5e99ac10-fb03-4305-8022-c68a632f118f"), ClassId = new Guid("52761d50-5812-4fe4-a800-8fd26e6d6662") },
+                new() { Id = 2, UserId = "2cb059ac-d7b3-42ac-a41e-f9660713773f", SchoolId = new Guid("5e99ac10-fb03-4305-8022-c68a632f118f"), ClassId = new Guid("52761d50-5812-4fe4-a800-8fd26e6d6662") },
+                new() { Id = 3, UserId = "70b90b3b-7cc4-4ce7-9313-0da8fc23f29f", SchoolId = new Guid("5e99ac10-fb03-4305-8022-c68a632f118f"), ClassId = new Guid("52761d50-5812-4fe4-a800-8fd26e6d6662") },
+                new() { Id = 4, UserId = "242cf21d-31ec-4dd7-bdcb-365b895e4ffe", SchoolId = new Guid("5e99ac10-fb03-4305-8022-c68a632f118f"), ClassId = new Guid("52761d50-5812-4fe4-a800-8fd26e6d6662") },
+                new() { Id = 5, UserId = "5ba8cb31-c401-45e9-a401-e47748fda3c3", SchoolId = new Guid("5e99ac10-fb03-4305-8022-c68a632f118f"), ClassId = new Guid("52761d50-5812-4fe4-a800-8fd26e6d6662") },
             };
 
             foreach (var student in students)

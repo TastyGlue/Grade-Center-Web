@@ -9,8 +9,8 @@
             //Create data to be seeded
             var schools = new List<School>()
             {
-                new() { Id = new Guid("5E99AC10-FB03-4305-8022-C68A632F118F"), Name = "Riverside High School", Address = "101 River Road, Education Town, Country" },
-                new() { Id = new Guid("24CBEE20-06B6-4726-902D-66FBBF88B804"), Name = "Hillcrest Academy", Address = "202 Hilltop Avenue, Suburbia, Country" }
+                new() { Id = new Guid("5e99ac10-fb03-4305-8022-c68a632f118f"), Name = "Riverside High School", Address = "101 River Road, Education Town, Country" },
+                new() { Id = new Guid("24cbee20-06b6-4726-902d-66fbbf88b804"), Name = "Hillcrest Academy", Address = "202 Hilltop Avenue, Suburbia, Country" }
             };
 
             foreach (var school in schools)

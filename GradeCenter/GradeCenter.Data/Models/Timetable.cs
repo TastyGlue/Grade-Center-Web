@@ -22,7 +22,7 @@
         public Teacher Teacher { get; set; } = default!;
 
         [Required]
-        [StringLength(10)]
+        [StringLength(50)]
         public string Year { get; set; } = default!;
 
         public DayOfWeek? Day { get; set; }

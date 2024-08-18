@@ -9,7 +9,7 @@
             //Create data to be seeded
             var classes = new List<Class>()
             {
-                new() { Id = new Guid("52761D50-5812-4FE4-A800-8FD26E6D6662"), SchoolId = new Guid("5E99AC10-FB03-4305-8022-C68A632F118F"), Grade = 8, Signature = "A", ClassTeacherId = 1 }
+                new() { Id = new Guid("52761d50-5812-4fe4-a800-8fd26e6d6662"), SchoolId = new Guid("5e99ac10-fb03-4305-8022-c68a632f118f"), Grade = 8, Signature = "A", ClassTeacherId = 1 }
             };
 
             foreach (var classObj in classes)
