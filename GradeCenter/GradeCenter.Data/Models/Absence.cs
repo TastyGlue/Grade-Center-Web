@@ -7,7 +7,7 @@
         public int Id { get; set; }
 
         [Required]
-        public string StudentId { get; set; } = default!;
+        public int StudentId { get; set; }
         [ForeignKey(nameof(StudentId))]
         public Student Student { get; set; } = default!;
 

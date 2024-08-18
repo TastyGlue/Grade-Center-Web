@@ -1,0 +1,6 @@
+@GradeCenter.API_HostAddress = http://localhost:5190
+
+GET {{GradeCenter.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
