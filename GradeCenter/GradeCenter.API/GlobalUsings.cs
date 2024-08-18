@@ -1,1 +1,9 @@
-﻿
+﻿global using GradeCenter.API.Extensiosn;
+global using GradeCenter.Data;
+global using GradeCenter.Data.Models;
+global using GradeCenter.Data.Seeders;
+global using System.Text;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.IdentityModel.Tokens;
