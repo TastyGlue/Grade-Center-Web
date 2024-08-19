@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GradeCenter.Data.Migrations
 {
     [DbContext(typeof(GradeCenterDbContext))]
-    [Migration("20240818210317_InitialCreate")]
+    [Migration("20240819151629_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -62,16 +62,11 @@ namespace GradeCenter.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("SchoolId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SchoolId");
 
                     b.HasIndex("UserId");
 
@@ -586,19 +581,11 @@ namespace GradeCenter.Data.Migrations
 
             modelBuilder.Entity("GradeCenter.Data.Models.Admin", b =>
                 {
-                    b.HasOne("GradeCenter.Data.Models.School", "School")
-                        .WithMany("Admins")
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("GradeCenter.Data.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("School");
 
                     b.Navigation("User");
                 });
@@ -851,8 +838,6 @@ namespace GradeCenter.Data.Migrations
 
             modelBuilder.Entity("GradeCenter.Data.Models.School", b =>
                 {
-                    b.Navigation("Admins");
-
                     b.Navigation("Headmasters");
                 });
 

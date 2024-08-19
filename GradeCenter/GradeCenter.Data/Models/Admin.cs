@@ -10,10 +10,5 @@
         public string UserId { get; set; } = default!;
         [ForeignKey(nameof(UserId))]
         public User User { get; set; } = default!;
-
-        [Required]
-        public Guid SchoolId { get; set; }
-        [ForeignKey(nameof(SchoolId))]
-        public School School { get; set; } = default!;
     }
 }
