@@ -5,7 +5,7 @@
         public static WebApplicationBuilder RegisterServices(this WebApplicationBuilder builder)
         {
             // Configuration of identity system
-            builder.Services.AddIdentity<User, IdentityRole<string>>(options =>
+            builder.Services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = false;
@@ -18,6 +18,7 @@
                 options.Password.RequireUppercase = false;
             })
                 .AddEntityFrameworkStores<GradeCenterDbContext>() // Tying the identity to the database context
+                .AddRoleManager<RoleManager<IdentityRole>>()
                 .AddDefaultTokenProviders();
 
             // Configuring connection to the PostgreSql database
@@ -56,6 +57,9 @@
             builder.Services.AddTransient<IDataSeeder, TeacherSubjectSeeder>();
             builder.Services.AddTransient<IDataSeeder, TimetableSeeder>();
             builder.Services.AddTransient<IDataSeeder, UserSeeder>();
+
+            // Register services
+            builder.Services.AddTransient<ITokenService, TokenService>();
 
             return builder;
         }
