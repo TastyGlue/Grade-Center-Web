@@ -20,6 +20,7 @@
         public DbSet<Timetable> Timetables { get; set; }
         public DbSet<StudentParent> StudentParents { get; set; }
         public DbSet<TeacherSubject> TeacherSubjects { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
