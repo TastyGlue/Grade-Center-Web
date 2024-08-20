@@ -6,7 +6,6 @@
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly byte[] securityKey;
         private readonly int tokenExpirationInMinutes;
-        private readonly int refreshTokenExpirationInDays;
 
         public TokenService(IConfiguration config, RoleManager<IdentityRole> roleManager)
         {
@@ -14,9 +13,8 @@
             _roleManager = roleManager;
 
             // Get values from config file
-            securityKey = Encoding.UTF8.GetBytes(_config["JwtSettings: SecurityKey"]!);
+            securityKey = Encoding.UTF8.GetBytes(_config["JwtSettings:SecurityKey"]!);
             tokenExpirationInMinutes = int.Parse(_config["JwtSettings:TokenExpirationInMinutes"]!);
-            refreshTokenExpirationInDays = int.Parse(_config["JwtSettings:RefreshTokenExpirationInDays"]!);
         }
 
         public async Task<string> GenerateAccessToken(User user, string roleName)

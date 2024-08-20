@@ -24,10 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\GradeCenter.Data\GradeCenter.Data.csproj" />
     <ProjectReference Include="..\GradeCenter.Shared\GradeCenter.Shared.csproj" />
   </ItemGroup>

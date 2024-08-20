@@ -18,6 +18,7 @@
                 options.Password.RequireUppercase = false;
             })
                 .AddEntityFrameworkStores<GradeCenterDbContext>() // Tying the identity to the database context
+                .AddUserManager<UserManager<User>>()
                 .AddRoleManager<RoleManager<IdentityRole>>()
                 .AddDefaultTokenProviders();
 
@@ -60,6 +61,7 @@
 
             // Register services
             builder.Services.AddTransient<ITokenService, TokenService>();
+            builder.Services.AddTransient<IAuthService, AuthService>();
 
             return builder;
         }
