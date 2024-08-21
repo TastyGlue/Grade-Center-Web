@@ -1,4 +1,5 @@
-﻿namespace GradeCenter.API.Services
+﻿
+namespace GradeCenter.API.Services
 {
     public class UserService : IUserService
     {
@@ -39,6 +40,20 @@
             await _context.SaveChangesAsync();
 
             return newUser.Id;
+        }
+
+        public async Task<bool> ChangePassword(ChangePasswordRequest request)
+        {
+            // Find user by id
+            var user = await _userManager.FindByIdAsync(request.UserId);
+            if (user == null)
+                return false;
+            if (!user.IsActive)
+                return false;
+
+            // Change password and return the result
+            var result = await _userManager.ChangePasswordAsync(user, request.Password, request.NewPassword);
+            return result.Succeeded;
         }
     }
 }

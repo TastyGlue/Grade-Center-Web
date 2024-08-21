@@ -21,16 +21,16 @@
 
             // Check if user exists
             if (user == null)
-                return Unauthorized();
+                return NotFound();
 
             // Check if user is active
             if (!user.IsActive)
-                return Forbid();
+                return NotFound();
 
             // Check if password is valid
             bool isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password);
             if (!isPasswordValid)
-                return Unauthorized();
+                return NotFound();
 
             try
             {

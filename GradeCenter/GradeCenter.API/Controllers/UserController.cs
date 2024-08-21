@@ -26,11 +26,16 @@
             }
         }
 
-        [HttpGet]
-        public IActionResult TestDateOnly()
+        // Authorize
+        [HttpPost("changePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
-            var dateonly = new DateOnly(2014, 4, 20);
-            return Ok(dateonly);
+            if (request.NewPassword != request.ConfirmPassword)
+                return BadRequest("\"Confirm Password\" does not match \"Password\"");
+
+            var result = await _userService.ChangePassword(request);
+
+            return result ? Ok() : BadRequest("Password change failed");
         }
     }
 }
