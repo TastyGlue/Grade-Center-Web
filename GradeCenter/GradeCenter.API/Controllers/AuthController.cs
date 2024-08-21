@@ -32,8 +32,15 @@
             if (!isPasswordValid)
                 return Unauthorized();
 
-            var result = await _authService.Login(user);
-            return Ok(result);
+            try
+            {
+                var result = await _authService.Login(user);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized(ex.Message);
+            }
         }
 
         [HttpGet("refresh")]

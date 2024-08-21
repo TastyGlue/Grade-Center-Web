@@ -7,6 +7,7 @@ global using GradeCenter.Data.Seeders;
 global using GradeCenter.Shared.Models.Responses;
 global using GradeCenter.Shared.Models.Requests;
 global using GradeCenter.Shared.Models;
+global using GradeCenter.Shared.Models.DTOs;
 global using System.Text;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;

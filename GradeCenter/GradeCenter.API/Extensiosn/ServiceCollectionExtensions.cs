@@ -62,6 +62,7 @@
             // Register services
             builder.Services.AddTransient<ITokenService, TokenService>();
             builder.Services.AddTransient<IAuthService, AuthService>();
+            builder.Services.AddTransient<IUserService, UserService>();
 
             return builder;
         }
