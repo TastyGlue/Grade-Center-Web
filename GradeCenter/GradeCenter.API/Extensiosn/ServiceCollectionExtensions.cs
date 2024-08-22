@@ -64,6 +64,9 @@
             builder.Services.AddTransient<IAuthService, AuthService>();
             builder.Services.AddTransient<IUserService, UserService>();
 
+            // Configure model mapping
+            builder.Services.ConfigureMappings();
+
             return builder;
         }
     }

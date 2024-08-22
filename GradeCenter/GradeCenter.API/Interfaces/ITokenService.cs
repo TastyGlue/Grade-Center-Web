@@ -4,5 +4,6 @@
     {
         Task<string> GenerateAccessToken(User user, string roleName);
         string GenerateRefreshToken();
+        TokenContent? GetTokenContentFromAuthHeader(StringValues authHeader);
     }
 }

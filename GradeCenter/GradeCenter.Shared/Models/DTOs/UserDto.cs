@@ -7,7 +7,7 @@
         public string FullName { get; set; } = default!;
         public DateOnly DateOfBirth { get; set; }
         public string? Address { get; set; }
-        public byte[]? Picture { get; set; }
+        public string? Picture { get; set; }
         public bool IsActive { get; set; }
     }
 }

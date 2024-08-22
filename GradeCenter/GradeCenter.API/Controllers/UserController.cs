@@ -27,7 +27,7 @@
         }
 
         // Authorize
-        [HttpPost("changePassword")]
+        [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
             if (request.NewPassword != request.ConfirmPassword)
@@ -36,6 +36,43 @@
             var result = await _userService.ChangePassword(request);
 
             return result ? Ok() : BadRequest("Password change failed");
+        }
+
+        // Authorize
+        [HttpPut]
+        public async Task<IActionResult> Edit([FromQuery] string userId, [FromBody] UserDto userDto)
+        {
+            var authHeader = HttpContext.Request.Headers.Authorization;
+            var result = await _userService.Edit(userId, userDto, authHeader);
+
+            return (result == null) ? Ok() : BadRequest(result);
+        }
+
+        // Admin only
+        [HttpGet("no-role")]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersWithoutRole()
+        {
+            var result = await _userService.GetUsersWithoutRoles();
+
+            return Ok(result);
+        }
+
+        // Admin only
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetAll()
+        {
+            var result = await _userService.GetAll();
+
+            return Ok(result);
+        }
+
+        // Admin only
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(string id)
+        {
+            var result = await _userService.GetById(id);
+
+            return (result == null) ? NotFound() : Ok(result);
         }
     }
 }

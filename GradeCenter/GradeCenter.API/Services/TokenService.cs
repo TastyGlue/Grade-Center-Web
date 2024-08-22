@@ -56,5 +56,44 @@
 
         public string GenerateRefreshToken()
             => Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+
+        public TokenContent? GetTokenContentFromAuthHeader(StringValues authHeader)
+        {
+            // Get the token string
+            var tokenString = authHeader.ToString().Split(' ')[1];
+            var token = new JwtSecurityToken(tokenString);
+
+            // Get claims from token
+            var claims = token.Claims.ToList();
+
+            // Get the values of the claims
+            var userId = claims.FirstOrDefault(x => x.Type == "nameid")?.Value;
+            if (userId == null)
+                return null;
+
+            var fullName = claims.FirstOrDefault(x => x.Type == "unique_name")?.Value;
+            if (fullName == null)
+                return null;
+
+            var email = claims.FirstOrDefault(x => x.Type == "email")?.Value;
+            if (email == null)
+                return null;
+
+            var roleString = claims.FirstOrDefault(x => x.Type == "role")?.Value;
+            if (roleString == null)
+                return null;
+
+            // Check if role exists
+            if (!Enum.TryParse(roleString.ToUpper(), out Roles role))
+                return null;
+
+            return new TokenContent()
+            {
+                UserId = userId,
+                Email = email,
+                FullName = fullName,
+                Role = role
+            };
+        }
     }
 }
