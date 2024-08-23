@@ -63,6 +63,7 @@
             builder.Services.AddTransient<ITokenService, TokenService>();
             builder.Services.AddTransient<IAuthService, AuthService>();
             builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<IHeadmasterService, HeadmasterService>();
 
             // Configure model mapping
             builder.Services.ConfigureMappings();

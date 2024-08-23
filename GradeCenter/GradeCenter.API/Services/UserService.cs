@@ -15,12 +15,12 @@ namespace GradeCenter.API.Services
             _tokenService = tokenService;
         }
 
-        public async Task<string> AddUser(AddUserRequest user)
+        public async Task<Response<string>> AddUser(AddUserRequest user)
         {
             // Check if someone is already registered with this email
             var isEmailExist = await _userManager.FindByEmailAsync(user.Email.ToUpper()) != null;
             if (isEmailExist)
-                throw new Exception($"Email is already in use");
+                return new() { Succeeded = false, Message = "Email is already in use" };
 
             var newUser = new User()
             {
@@ -34,15 +34,22 @@ namespace GradeCenter.API.Services
                 SecurityStamp = Guid.NewGuid().ToString()
             };
 
-            // Add new user to database
-            await _context.Users.AddAsync(newUser);
-            await _context.SaveChangesAsync();
+            try
+            {
+                // Add new user to database
+                await _context.Users.AddAsync(newUser);
+                await _context.SaveChangesAsync();
 
-            // Assign password to new user
-            await _userManager.AddPasswordAsync(newUser, user.Password);
-            await _context.SaveChangesAsync();
+                // Assign password to new user
+                await _userManager.AddPasswordAsync(newUser, user.Password);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return new() { Succeeded = false, Message = ex.ToString() };
+            }
 
-            return newUser.Id;
+            return new() { Succeeded = true, ReturnValue = newUser.Id };
         }
 
         public async Task<bool> ChangePassword(ChangePasswordRequest request)
@@ -59,20 +66,23 @@ namespace GradeCenter.API.Services
             return result.Succeeded;
         }
 
-        public async Task<string?> Edit(string userId, UserDto userDto, StringValues authHeader)
+        public async Task<Response<string>> Edit(string userId, UserDto userDto, StringValues authHeader)
         {
+            if (userId != userDto.Id)
+                return new() { Succeeded = false, Message = "Id mismatch in request" };
+
             var token = _tokenService.GetTokenContentFromAuthHeader(authHeader);
             if (token == null)
-                return "Authentication failed";
+                return new() { Succeeded = false, Message = "Authentication failed" };
 
             // Check if request came from the account owner or an admin
             if (userId != token.UserId && token.Role != Roles.ADMIN)
-                return "Authentication failed";
+                return new() { Succeeded = false, Message = "Authentication failed" };
 
             // Check if user exists in the database
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
-                return "Database error";
+                return new() { Succeeded = false, Message = "Couldn't find user" };
 
             // Attempt to change Email
             if (user.Email != userDto.Email)
@@ -81,7 +91,7 @@ namespace GradeCenter.API.Services
                 var result = await _userManager.ChangeEmailAsync(user, userDto.Email, emailChangeToken);
 
                 if (!result.Succeeded)
-                    return string.Join(", ", result.Errors);
+                    return new() { Succeeded = false, Message = string.Join(", ", result.Errors) };
 
                 user.Email = userDto.Email;
             }
@@ -90,7 +100,7 @@ namespace GradeCenter.API.Services
             if (user.FullName != userDto.FullName)
             {
                 if (token.Role != Roles.ADMIN)
-                    return "You don't have the permissions for this operation";
+                    return new() { Succeeded = false, Message = "You don't have the permissions for this operation" };
 
                 user.FullName = userDto.FullName;
             }
@@ -99,7 +109,7 @@ namespace GradeCenter.API.Services
             if (user.DateOfBirth != userDto.DateOfBirth)
             {
                 if (token.Role != Roles.ADMIN)
-                    return "You don't have the permissions for this operation";
+                    return new() { Succeeded = false, Message = "You don't have the permissions for this operation" };
 
                 user.DateOfBirth = userDto.DateOfBirth;
             }
@@ -124,10 +134,10 @@ namespace GradeCenter.API.Services
             }
             catch (Exception)
             {
-                return "Database error";
+                return new() { Succeeded = false, Message = "Database error" };
             }
 
-            return null;
+            return new() { Succeeded = true };
         }
 
         public async Task<IEnumerable<UserDto>> GetAll()

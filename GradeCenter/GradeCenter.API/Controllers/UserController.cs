@@ -12,18 +12,15 @@
         }
 
         // Admin only
-        [HttpPost("add")]
+        [HttpPost]
         public async Task<IActionResult> AddUser([FromBody] AddUserRequest user)
         {
-            try
-            {
-                var result = await _userService.AddUser(user);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return Unauthorized(ex.Message);
-            }
+            var result = await _userService.AddUser(user);
+
+            if (result.Succeeded)
+                return CreatedAtAction(nameof(AddUser), result.ReturnValue);
+            else
+                return BadRequest(result.Message);
         }
 
         // Authorize
@@ -45,7 +42,7 @@
             var authHeader = HttpContext.Request.Headers.Authorization;
             var result = await _userService.Edit(userId, userDto, authHeader);
 
-            return (result == null) ? Ok() : BadRequest(result);
+            return (result.Succeeded) ? Ok() : BadRequest(result.Message);
         }
 
         // Admin only
@@ -66,7 +63,6 @@
             return Ok(result);
         }
 
-        // Admin only
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {

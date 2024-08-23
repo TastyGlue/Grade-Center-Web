@@ -17,7 +17,7 @@ namespace GradeCenter.Data.Seeders
             foreach (var headmaster in headmasters)
             {
                 //Check if data is already seeded
-                bool isExist = await context.Set<Headmaster>().AnyAsync(x => x.Id == headmaster.Id);
+                bool isExist = await context.Set<Headmaster>().AnyAsync(x => x.Id == headmaster.Id || x.UserId == headmaster.UserId);
 
                 //Seed data if not already seeded
                 if (!isExist)
