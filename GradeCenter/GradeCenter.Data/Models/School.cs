@@ -15,5 +15,7 @@
         public string Address { get; set; } = default!;
 
         public ICollection<Headmaster> Headmasters { get; set; } = new List<Headmaster>();
+        public ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
+        public ICollection<Class> Classes { get; set; } = new List<Class>();
     }
 }

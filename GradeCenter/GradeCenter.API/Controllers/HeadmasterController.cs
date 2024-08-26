@@ -32,11 +32,19 @@
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<HeadmasterDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<HeadmasterDto>>> GetAll([FromQuery] string? schoolId = null)
         {
-            var result = await _headmasterService.GetAll();
+            var result = await _headmasterService.GetAll(schoolId);
 
             return Ok(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var result = await _headmasterService.GetById(id);
+
+            return (result == null) ? NotFound() : Ok(result);
         }
     }
 }

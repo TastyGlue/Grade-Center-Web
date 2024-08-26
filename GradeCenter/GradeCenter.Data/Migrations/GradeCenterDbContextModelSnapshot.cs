@@ -234,9 +234,6 @@ namespace GradeCenter.Data.Migrations
                     b.Property<Guid>("ClassId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("SchoolId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("text");
@@ -244,8 +241,6 @@ namespace GradeCenter.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClassId");
-
-                    b.HasIndex("SchoolId");
 
                     b.HasIndex("UserId");
 
@@ -618,7 +613,7 @@ namespace GradeCenter.Data.Migrations
                         .HasForeignKey("ClassTeacherId");
 
                     b.HasOne("GradeCenter.Data.Models.School", "School")
-                        .WithMany()
+                        .WithMany("Classes")
                         .HasForeignKey("SchoolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -693,12 +688,6 @@ namespace GradeCenter.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GradeCenter.Data.Models.School", "School")
-                        .WithMany()
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("GradeCenter.Data.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -706,8 +695,6 @@ namespace GradeCenter.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Class");
-
-                    b.Navigation("School");
 
                     b.Navigation("User");
                 });
@@ -734,7 +721,7 @@ namespace GradeCenter.Data.Migrations
             modelBuilder.Entity("GradeCenter.Data.Models.Teacher", b =>
                 {
                     b.HasOne("GradeCenter.Data.Models.School", "School")
-                        .WithMany()
+                        .WithMany("Teachers")
                         .HasForeignKey("SchoolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -859,7 +846,11 @@ namespace GradeCenter.Data.Migrations
 
             modelBuilder.Entity("GradeCenter.Data.Models.School", b =>
                 {
+                    b.Navigation("Classes");
+
                     b.Navigation("Headmasters");
+
+                    b.Navigation("Teachers");
                 });
 
             modelBuilder.Entity("GradeCenter.Data.Models.Student", b =>

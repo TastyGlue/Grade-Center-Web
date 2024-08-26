@@ -33,7 +33,7 @@ namespace GradeCenter.Data.Migrations
                     Id = table.Column<string>(type: "text", nullable: false),
                     FullName = table.Column<string>(type: "text", nullable: false),
                     DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
-                    Address = table.Column<string>(type: "text", nullable: false),
+                    Address = table.Column<string>(type: "text", nullable: true),
                     Picture = table.Column<byte[]>(type: "bytea", nullable: true),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -54,6 +54,21 @@ namespace GradeCenter.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RefreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    Token = table.Column<string>(type: "text", nullable: false),
+                    IsUsed = table.Column<bool>(type: "boolean", nullable: false),
+                    ExpireOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -335,7 +350,6 @@ namespace GradeCenter.Data.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<string>(type: "text", nullable: false),
-                    SchoolId = table.Column<Guid>(type: "uuid", nullable: false),
                     ClassId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -351,12 +365,6 @@ namespace GradeCenter.Data.Migrations
                         name: "FK_Students_Classes_ClassId",
                         column: x => x.ClassId,
                         principalTable: "Classes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Students_Schools_SchoolId",
-                        column: x => x.SchoolId,
-                        principalTable: "Schools",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -588,11 +596,6 @@ namespace GradeCenter.Data.Migrations
                 column: "ClassId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Students_SchoolId",
-                table: "Students",
-                column: "SchoolId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Students_UserId",
                 table: "Students",
                 column: "UserId");
@@ -657,6 +660,9 @@ namespace GradeCenter.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Headmasters");
+
+            migrationBuilder.DropTable(
+                name: "RefreshTokens");
 
             migrationBuilder.DropTable(
                 name: "StudentParents");

@@ -63,7 +63,10 @@
             builder.Services.AddTransient<ITokenService, TokenService>();
             builder.Services.AddTransient<IAuthService, AuthService>();
             builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<IAdminService, AdminService>();
             builder.Services.AddTransient<IHeadmasterService, HeadmasterService>();
+            builder.Services.AddTransient<ITeacherService, TeacherService>();
+            builder.Services.AddTransient<IStudentService, StudentService>();
 
             // Configure model mapping
             builder.Services.ConfigureMappings();

@@ -4,7 +4,7 @@
     {
         Task<Response<int>> AddHeadmaster(AddHeadmasterRequest request);
         Task<Response<string>> Edit(int headmasterId, HeadmasterDto headmasterDto);
-        Task<IEnumerable<HeadmasterDto>> GetAll();
+        Task<IEnumerable<HeadmasterDto>> GetAll(string? schoolId);
         Task<HeadmasterDto?> GetById(int id);
     }
 }

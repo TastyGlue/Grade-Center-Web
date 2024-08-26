@@ -12,11 +12,6 @@
         public User User { get; set; } = default!;
 
         [Required]
-        public Guid SchoolId { get; set; }
-        [ForeignKey(nameof(SchoolId))]
-        public School School { get; set; } = default!;
-
-        [Required]
         public Guid ClassId { get; set; }
         [ForeignKey(nameof(ClassId))]
         public Class Class { get; set; } = default!;
