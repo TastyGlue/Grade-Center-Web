@@ -52,12 +52,21 @@
             if (teacherId != teacherDto.Id)
                 return new() { Succeeded = false, Message = "Id mismatch in request" };
 
-            var teacher = await _context.Teachers.FirstOrDefaultAsync(x => x.Id == teacherId);
+            var teacher = await _context.Teachers
+                .Include(x => x.TeacherSubjects)
+                    .ThenInclude(x => x.Subject)
+                .Include(x => x.School)
+                .FirstOrDefaultAsync(x => x.Id == teacherId);
             if (teacher == null)
                 return new() { Succeeded = false, Message = "Couldn't find teacher" };
 
             if (teacher.SchoolId != teacherDto.School.Id)
                 teacher.SchoolId = teacherDto.School.Id;
+
+            var currentSubjects = teacher.TeacherSubjects.ToList();
+            var editSubjectsResult = await EditTeacherSubjects(currentSubjects, teacherDto.Subjects, teacherId);
+            if (!editSubjectsResult.Succeeded)
+                return editSubjectsResult;
 
             try
             {
@@ -107,6 +116,49 @@
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             return teacher?.Adapt<TeacherDto>();
+        }
+
+        private async Task<Response<string>> EditTeacherSubjects(List<TeacherSubject> currentSubjects, List<SubjectDto> newSubjects, int teacherId)
+        {
+            try
+            {
+                if (currentSubjects.Count > 0)
+                {
+                    List<Guid> removedSubjects = [];
+
+                    foreach (var currentSubject in currentSubjects)
+                    {
+                        if (!newSubjects.Any(x => x.Id == currentSubject.SubjectId))
+                        {
+                            removedSubjects.Add(currentSubject.SubjectId);
+                            _context.TeacherSubjects.Remove(currentSubject);
+                        }
+                    }
+
+                    currentSubjects.RemoveAll(x => removedSubjects.Any(y => y == x.SubjectId));
+                }
+
+
+                foreach (var newSubject in newSubjects)
+                {
+                    if (!currentSubjects.Any(x => x.SubjectId == newSubject.Id))
+                    {
+                        await _context.TeacherSubjects.AddAsync(new()
+                        {
+                            TeacherId = teacherId,
+                            SubjectId = newSubject.Id
+                        });
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+
+                return new() { Succeeded = true };
+            }
+            catch (Exception ex)
+            {
+                return new() { Succeeded = false, Message = ex.ToString() };
+            }
         }
     }
 }

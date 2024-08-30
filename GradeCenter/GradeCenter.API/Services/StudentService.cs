@@ -59,12 +59,17 @@
             if (studentId != studentDto.Id)
                 return new() { Succeeded = false, Message = "Id mismatch in request" };
 
-            var student = await _context.Students.FirstOrDefaultAsync(x => x.Id == studentId);
+            var student = await _context.Students
+                .Include(x => x.Class)
+                .FirstOrDefaultAsync(x => x.Id == studentId);
             if (student == null)
                 return new() { Succeeded = false, Message = "Couldn't find student" };
 
             try
             {
+                if (student.ClassId == studentDto.Class.Id)
+                    student.ClassId = studentDto.Class.Id;
+
                 _context.Entry(student).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
