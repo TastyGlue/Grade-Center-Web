@@ -18,6 +18,16 @@
             if (user == null)
                 return new() { Succeeded = false, Message = "Couldn't find user" };
 
+            var userRole = await _userManager.GetRolesAsync(user);
+            if (userRole.Count > 0)
+                return new() { Succeeded = false, Message = "User already has a role and can't be assigned to this role" };
+            else
+            {
+                var result = await _userManager.AddToRoleAsync(user, "ADMIN");
+                if (!result.Succeeded)
+                    return new() { Succeeded = false, Message = "There was an error adding user to the \"ADMIN\"" };
+            }
+
             // Check if the user is already a admin at the school
             bool isUserAdmin = _context.Admins.Any(x => x.UserId == userId);
             if (isUserAdmin)

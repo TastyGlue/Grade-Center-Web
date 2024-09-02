@@ -8,5 +8,6 @@
         Task<IEnumerable<UserDto>> GetUsersWithoutRoles();
         Task<IEnumerable<UserDto>> GetAll();
         Task<UserDto?> GetById(string id);
+        Task<Response<bool>> RemoveFromRole(string userId);
     }
 }

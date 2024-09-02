@@ -30,6 +30,16 @@
             if (school == null)
                 return new() { Succeeded = false, Message = "Couldn't find school" };
 
+            var userRole = await _userManager.GetRolesAsync(user);
+            if (userRole.Count > 0)
+                return new() { Succeeded = false, Message = "User already has a role and can't be assigned to this role" };
+            else
+            {
+                var result = await _userManager.AddToRoleAsync(user, "STUDENT");
+                if (!result.Succeeded)
+                    return new() { Succeeded = false, Message = "There was an error adding user to the \"STUDENT\"" };
+            }
+
             // Check if the user is already a student in the school
             bool isUserStudentInSchool = school.Classes.Any(x => x.Students.Any(y => y.UserId == request.UserId));
             if (isUserStudentInSchool)

@@ -164,5 +164,21 @@ namespace GradeCenter.API.Services
             // Adapt User type to UserDto
             return users.Adapt<List<UserDto>>();
         }
+
+        public async Task<Response<bool>> RemoveFromRole(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return new() { Succeeded = false, Message = "Couldn't find user" };
+
+            var userRole = await _userManager.GetRolesAsync(user);
+            if (userRole.Count == 0)
+                return new() { Succeeded = false, Message = "User doesn't have a role" };
+
+            foreach (var role in userRole)
+                await _userManager.RemoveFromRoleAsync(user, role.ToUpper());
+
+            return new() { Succeeded = true };
+        }
     }
 }

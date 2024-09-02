@@ -70,5 +70,14 @@
 
             return (result == null) ? NotFound() : Ok(result);
         }
+
+        // Admin only
+        [HttpPost("{userId}")]
+        public async Task<IActionResult> RemoveFromRole(string userId)
+        {
+            var result = await _userService.RemoveFromRole(userId);
+
+            return (result.Succeeded) ? Ok() : BadRequest(result.Message);
+        }
     }
 }
