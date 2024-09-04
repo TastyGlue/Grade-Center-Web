@@ -16,7 +16,7 @@
             // Find user in database
             var user = await _userManager.FindByIdAsync(request.UserId);
             if (user == null)
-                return new() { Succeeded = false, Message = "Couldn't find user"};
+                return new() { Succeeded = false, Message = "Couldn't find user" };
 
             // Find school in database
             var school = await _context.Schools.Include(x => x.Headmasters).FirstOrDefaultAsync(x => x.Id == request.SchoolId);
@@ -54,15 +54,12 @@
                 return new() { Succeeded = false, Message = ex.ToString() };
             }
 
-            return new() { Succeeded = true, ReturnValue = newHeadmaster.Id};
+            return new() { Succeeded = true, ReturnValue = newHeadmaster.Id };
         }
 
-        public async Task<Response<string>> Edit(int headmasterId, HeadmasterDto headmasterDto)
+        public async Task<Response<string>> Edit(HeadmasterDto headmasterDto)
         {
-            if (headmasterId != headmasterDto.Id)
-                return new() { Succeeded = false, Message = "Id mismatch in request" };
-
-            var headmaster = await _context.Headmasters.FirstOrDefaultAsync(x => x.Id == headmasterId);
+            var headmaster = await _context.Headmasters.FirstOrDefaultAsync(x => x.Id == headmasterDto.Id);
             if (headmaster == null)
                 return new() { Succeeded = false, Message = "Couldn't find headmaster" };
 
@@ -79,7 +76,7 @@
                 return new() { Succeeded = false, Message = ex.ToString() };
             }
 
-            return new() { Succeeded = true }; 
+            return new() { Succeeded = true };
         }
 
         public async Task<IEnumerable<HeadmasterDto>> GetAll(string? schoolId)

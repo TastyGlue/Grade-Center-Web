@@ -64,14 +64,11 @@
             return new() { Succeeded = true, ReturnValue = newStudent.Id };
         }
 
-        public async Task<Response<string>> Edit(int studentId, StudentDto studentDto)
+        public async Task<Response<string>> Edit(StudentDto studentDto)
         {
-            if (studentId != studentDto.Id)
-                return new() { Succeeded = false, Message = "Id mismatch in request" };
-
             var student = await _context.Students
                 .Include(x => x.Class)
-                .FirstOrDefaultAsync(x => x.Id == studentId);
+                .FirstOrDefaultAsync(x => x.Id == studentDto.Id);
             if (student == null)
                 return new() { Succeeded = false, Message = "Couldn't find student" };
 

@@ -51,12 +51,9 @@
             return new() { Succeeded = true, ReturnValue = newAdmin.Id };
         }
 
-        public async Task<Response<string>> Edit(int adminId, AdminDto adminDto)
+        public async Task<Response<string>> Edit(AdminDto adminDto)
         {
-            if (adminId != adminDto.Id)
-                return new() { Succeeded = false, Message = "Id mismatch in request" };
-
-            var admin = await _context.Admins.FirstOrDefaultAsync(x => x.Id == adminId);
+            var admin = await _context.Admins.FirstOrDefaultAsync(x => x.Id == adminDto.Id);
             if (admin == null)
                 return new() { Succeeded = false, Message = "Couldn't find admin" };
 

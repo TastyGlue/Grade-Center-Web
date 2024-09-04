@@ -24,9 +24,9 @@
 
         // Admin only
         [HttpPut]
-        public async Task<IActionResult> Edit([FromQuery] int headmasterId, [FromBody] HeadmasterDto headmasterDto)
+        public async Task<IActionResult> Edit([FromBody] HeadmasterDto headmasterDto)
         {
-            var result = await _headmasterService.Edit(headmasterId, headmasterDto);
+            var result = await _headmasterService.Edit(headmasterDto);
 
             return (result.Succeeded) ? Ok() : BadRequest(result.Message);
         }

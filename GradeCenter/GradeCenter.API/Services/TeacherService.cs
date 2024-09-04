@@ -57,16 +57,13 @@
             return new() { Succeeded = true, ReturnValue = newTeacher.Id };
         }
 
-        public async Task<Response<string>> Edit(int teacherId, TeacherDto teacherDto)
+        public async Task<Response<string>> Edit(TeacherDto teacherDto)
         {
-            if (teacherId != teacherDto.Id)
-                return new() { Succeeded = false, Message = "Id mismatch in request" };
-
             var teacher = await _context.Teachers
                 .Include(x => x.TeacherSubjects)
                     .ThenInclude(x => x.Subject)
                 .Include(x => x.School)
-                .FirstOrDefaultAsync(x => x.Id == teacherId);
+                .FirstOrDefaultAsync(x => x.Id == teacherDto.Id);
             if (teacher == null)
                 return new() { Succeeded = false, Message = "Couldn't find teacher" };
 
@@ -74,7 +71,7 @@
                 teacher.SchoolId = teacherDto.School.Id;
 
             var currentSubjects = teacher.TeacherSubjects.ToList();
-            var editSubjectsResult = await EditTeacherSubjects(currentSubjects, teacherDto.Subjects, teacherId);
+            var editSubjectsResult = await EditTeacherSubjects(currentSubjects, teacherDto.Subjects, teacherDto.Id);
             if (!editSubjectsResult.Succeeded)
                 return editSubjectsResult;
 

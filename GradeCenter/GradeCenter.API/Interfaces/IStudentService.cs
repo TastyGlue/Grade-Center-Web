@@ -3,7 +3,7 @@
     public interface IStudentService
     {
         Task<Response<int>> AddStudent(AddStudentRequest request);
-        Task<Response<string>> Edit(int studentId, StudentDto studentDto);
+        Task<Response<string>> Edit(StudentDto studentDto);
         Task<IEnumerable<StudentDto>> GetAll(string? schoolId);
         Task<StudentDto?> GetById(int id);
     }

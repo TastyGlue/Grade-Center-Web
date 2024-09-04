@@ -37,10 +37,10 @@
 
         // Authorize
         [HttpPut]
-        public async Task<IActionResult> Edit([FromQuery] string userId, [FromBody] UserDto userDto)
+        public async Task<IActionResult> Edit([FromBody] UserDto userDto)
         {
             var authHeader = HttpContext.Request.Headers.Authorization;
-            var result = await _userService.Edit(userId, userDto, authHeader);
+            var result = await _userService.Edit(userDto, authHeader);
 
             return (result.Succeeded) ? Ok() : BadRequest(result.Message);
         }

@@ -66,21 +66,18 @@ namespace GradeCenter.API.Services
             return result.Succeeded;
         }
 
-        public async Task<Response<string>> Edit(string userId, UserDto userDto, StringValues authHeader)
+        public async Task<Response<string>> Edit(UserDto userDto, StringValues authHeader)
         {
-            if (userId != userDto.Id)
-                return new() { Succeeded = false, Message = "Id mismatch in request" };
-
             var token = _tokenService.GetTokenContentFromAuthHeader(authHeader);
             if (token == null)
                 return new() { Succeeded = false, Message = "Authentication failed" };
 
             // Check if request came from the account owner or an admin
-            if (userId != token.UserId && token.Role != Roles.ADMIN)
+            if (userDto.Id != token.UserId && token.Role != Roles.ADMIN)
                 return new() { Succeeded = false, Message = "Authentication failed" };
 
             // Check if user exists in the database
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(userDto.Id);
             if (user == null)
                 return new() { Succeeded = false, Message = "Couldn't find user" };
 

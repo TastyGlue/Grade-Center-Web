@@ -55,7 +55,7 @@ namespace GradeCenter.API.Services
             return new() { Succeeded = true, ReturnValue = newParent.Id };
         }
 
-        public async Task<Response<string>> Edit(int parentId, ParentDto parentDto)
+        public async Task<Response<string>> Edit(ParentDto parentDto)
         {
             throw new NotImplementedException();
         }
