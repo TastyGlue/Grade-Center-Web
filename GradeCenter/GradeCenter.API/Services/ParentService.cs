@@ -1,5 +1,4 @@
-﻿
-namespace GradeCenter.API.Services
+﻿namespace GradeCenter.API.Services
 {
     public class ParentService : IParentService
     {
@@ -57,17 +56,93 @@ namespace GradeCenter.API.Services
 
         public async Task<Response<string>> Edit(ParentDto parentDto)
         {
-            throw new NotImplementedException();
+            var parent = await _context.Parents
+                .Include(x => x.StudentParents)
+                    .ThenInclude(x => x.Student)
+                .FirstOrDefaultAsync(x => x.Id == parentDto.Id);
+
+            if (parent == null)
+                return new() { Succeeded = false, Message = "Couldn't find parent" };
+
+            var currentStudents = parent.StudentParents.ToList();
+            var editStudentsResult = await EditParentStudents(currentStudents, parentDto.Students, parentDto.Id);
+            if (!editStudentsResult.Succeeded)
+                return editStudentsResult;
+
+            try
+            {
+                _context.Entry(parent).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return new() { Succeeded = false, Message = ex.ToString() };
+            }
+
+            return new() { Succeeded = true };
         }
 
         public async Task<IEnumerable<ParentDto>> GetAll()
         {
-            throw new NotImplementedException();
+            var parents = await _context.Parents
+                .Include(x => x.StudentParents)
+                    .ThenInclude(x => x.Student)
+                .ToListAsync();
+
+            return parents.Adapt<List<ParentDto>>();
         }
 
         public async Task<ParentDto?> GetById(int id)
         {
-            throw new NotImplementedException();
+            var parent = await _context.Parents
+                .Include(x => x.StudentParents)
+                    .ThenInclude(x => x.Student)
+                .FirstOrDefaultAsync();
+
+            return parent?.Adapt<ParentDto>();
+        }
+
+        private async Task<Response<string>> EditParentStudents(List<StudentParent> currentStudents, List<StudentDto> newStudents, int parentId)
+        {
+            try
+            {
+                if (currentStudents.Count > 0)
+                {
+                    List<int> removedStudents = [];
+
+                    foreach (var currentStudent in currentStudents)
+                    {
+                        if (!newStudents.Any(x => x.Id == currentStudent.ParentId))
+                        {
+                            removedStudents.Add(currentStudent.StudentId);
+                            _context.StudentParents.Remove(currentStudent);
+                        }
+                    }
+
+                    currentStudents.RemoveAll(x => removedStudents.Any(y => y == x.StudentId));
+                }
+
+
+                foreach (var newStudent in newStudents)
+                {
+                    if (!currentStudents.Any(x => x.StudentId == newStudent.Id))
+                    {
+                        await _context.StudentParents.AddAsync(new()
+                        {
+                            StudentId = newStudent.Id,
+                            ParentId = parentId
+                        });
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+
+                return new() { Succeeded = true };
+            }
+            catch (Exception ex)
+            {
+                return new() { Succeeded = false, Message = ex.ToString() };
+            }
         }
     }
 }
