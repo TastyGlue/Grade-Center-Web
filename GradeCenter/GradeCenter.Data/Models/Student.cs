@@ -11,10 +11,9 @@
         [ForeignKey(nameof(UserId))]
         public User User { get; set; } = default!;
 
-        [Required]
-        public Guid ClassId { get; set; }
+        public Guid? ClassId { get; set; }
         [ForeignKey(nameof(ClassId))]
-        public Class Class { get; set; } = default!;
+        public Class? Class { get; set; }
 
         public ICollection<StudentParent> StudentParents { get; set; } = new List<StudentParent>();
 
