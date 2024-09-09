@@ -101,7 +101,7 @@
             {
                 try
                 {
-                    var filteredResults = students.Where(x => x.Class.SchoolId == new Guid(schoolId)).ToList();
+                    var filteredResults = students.Where(x => x.Class?.SchoolId == new Guid(schoolId)).ToList();
                     return filteredResults.Adapt<List<StudentDto>>();
                 }
                 catch (Exception)
