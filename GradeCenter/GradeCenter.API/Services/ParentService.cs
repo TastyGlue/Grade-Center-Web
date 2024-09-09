@@ -84,8 +84,10 @@
         public async Task<IEnumerable<ParentDto>> GetAll()
         {
             var parents = await _context.Parents
+                .Include(x => x.User)
                 .Include(x => x.StudentParents)
                     .ThenInclude(x => x.Student)
+                        .ThenInclude(x => x.User)
                 .ToListAsync();
 
             return parents.Adapt<List<ParentDto>>();
@@ -94,8 +96,10 @@
         public async Task<ParentDto?> GetById(int id)
         {
             var parent = await _context.Parents
+                .Include(x => x.User)
                 .Include(x => x.StudentParents)
                     .ThenInclude(x => x.Student)
+                        .ThenInclude(x => x.User)
                 .FirstOrDefaultAsync();
 
             return parent?.Adapt<ParentDto>();
@@ -105,21 +109,29 @@
         {
             try
             {
-                parent.StudentParents.Clear();
+                var currentStudentsIds = parent.StudentParents.Select(x => x.StudentId).ToHashSet();
+                var newStudentsIds = newStudents.Select(x => x.Id).ToHashSet();
 
-                var newStudentParents = new List<StudentParent>();
-                foreach (var newStudent in newStudents)
+                bool areStudentsEqual = currentStudentsIds.SetEquals(newStudentsIds);
+
+                if (!areStudentsEqual)
                 {
-                    newStudentParents.Add(new()
+                    parent.StudentParents.Clear();
+
+                    var newStudentParents = new List<StudentParent>();
+                    foreach (var newStudent in newStudents)
                     {
-                        StudentId = newStudent.Id,
-                        ParentId = parent.Id
-                    });
+                        newStudentParents.Add(new()
+                        {
+                            StudentId = newStudent.Id,
+                            ParentId = parent.Id
+                        });
+                    }
+
+                    parent.StudentParents = newStudentParents;
+
+                    await _context.SaveChangesAsync(); 
                 }
-
-                parent.StudentParents = newStudentParents;
-
-                await _context.SaveChangesAsync();
 
                 return new() { Succeeded = true };
             }

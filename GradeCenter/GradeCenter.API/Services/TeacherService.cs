@@ -1,4 +1,6 @@
-﻿namespace GradeCenter.API.Services
+﻿using GradeCenter.Data.Models;
+
+namespace GradeCenter.API.Services
 {
     public class TeacherService : ITeacherService
     {
@@ -129,21 +131,29 @@
         {
             try
             {
-                teacher.TeacherSubjects.Clear();
+                var currentSubjectsIds = teacher.TeacherSubjects.Select(x => x.SubjectId).ToHashSet();
+                var newSubjectsIds = newSubjects.Select(x => x.Id).ToHashSet();
 
-                var newTeacherSubjects = new List<TeacherSubject>();
-                foreach (var newSubject in newSubjects)
+                bool areSubjectsEqual = currentSubjectsIds.SetEquals(newSubjectsIds);
+
+                if (!areSubjectsEqual)
                 {
-                    newTeacherSubjects.Add(new()
+                    teacher.TeacherSubjects.Clear();
+
+                    var newTeacherSubjects = new List<TeacherSubject>();
+                    foreach (var newSubject in newSubjects)
                     {
-                        TeacherId = teacher.Id,
-                        SubjectId = newSubject.Id
-                    });
+                        newTeacherSubjects.Add(new()
+                        {
+                            TeacherId = teacher.Id,
+                            SubjectId = newSubject.Id
+                        });
+                    }
+
+                    teacher.TeacherSubjects = newTeacherSubjects;
+
+                    await _context.SaveChangesAsync(); 
                 }
-
-                teacher.TeacherSubjects = newTeacherSubjects;
-
-                await _context.SaveChangesAsync();
 
                 return new() { Succeeded = true };
             }
