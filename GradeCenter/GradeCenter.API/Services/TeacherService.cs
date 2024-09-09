@@ -71,7 +71,7 @@
                 teacher.SchoolId = teacherDto.School.Id;
 
             var currentSubjects = teacher.TeacherSubjects.ToList();
-            var editSubjectsResult = await EditTeacherSubjects(currentSubjects, teacherDto.Subjects, teacherDto.Id);
+            var editSubjectsResult = await EditTeacherSubjects(teacher, teacherDto.Subjects);
             if (!editSubjectsResult.Succeeded)
                 return editSubjectsResult;
 
@@ -125,38 +125,23 @@
             return teacher?.Adapt<TeacherDto>();
         }
 
-        private async Task<Response<string>> EditTeacherSubjects(List<TeacherSubject> currentSubjects, List<SubjectDto> newSubjects, int teacherId)
+        private async Task<Response<string>> EditTeacherSubjects(Teacher teacher, List<SubjectDto> newSubjects)
         {
             try
             {
-                if (currentSubjects.Count > 0)
-                {
-                    List<Guid> removedSubjects = [];
+                teacher.TeacherSubjects.Clear();
 
-                    foreach (var currentSubject in currentSubjects)
-                    {
-                        if (!newSubjects.Any(x => x.Id == currentSubject.SubjectId))
-                        {
-                            removedSubjects.Add(currentSubject.SubjectId);
-                            _context.TeacherSubjects.Remove(currentSubject);
-                        }
-                    }
-
-                    currentSubjects.RemoveAll(x => removedSubjects.Any(y => y == x.SubjectId));
-                }
-
-
+                var newTeacherSubjects = new List<TeacherSubject>();
                 foreach (var newSubject in newSubjects)
                 {
-                    if (!currentSubjects.Any(x => x.SubjectId == newSubject.Id))
+                    newTeacherSubjects.Add(new()
                     {
-                        await _context.TeacherSubjects.AddAsync(new()
-                        {
-                            TeacherId = teacherId,
-                            SubjectId = newSubject.Id
-                        });
-                    }
+                        TeacherId = teacher.Id,
+                        SubjectId = newSubject.Id
+                    });
                 }
+
+                teacher.TeacherSubjects = newTeacherSubjects;
 
                 await _context.SaveChangesAsync();
 

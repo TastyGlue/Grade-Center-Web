@@ -65,13 +65,12 @@
                 return new() { Succeeded = false, Message = "Couldn't find parent" };
 
             var currentStudents = parent.StudentParents.ToList();
-            var editStudentsResult = await EditParentStudents(currentStudents, parentDto.Students, parentDto.Id);
+            var editStudentsResult = await EditParentStudents(parent, parentDto.Students);
             if (!editStudentsResult.Succeeded)
                 return editStudentsResult;
 
             try
             {
-                _context.Entry(parent).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -102,38 +101,23 @@
             return parent?.Adapt<ParentDto>();
         }
 
-        private async Task<Response<string>> EditParentStudents(List<StudentParent> currentStudents, List<StudentDto> newStudents, int parentId)
+        private async Task<Response<string>> EditParentStudents(Parent parent, List<StudentDto> newStudents)
         {
             try
             {
-                if (currentStudents.Count > 0)
-                {
-                    List<int> removedStudents = [];
+                parent.StudentParents.Clear();
 
-                    foreach (var currentStudent in currentStudents)
-                    {
-                        if (!newStudents.Any(x => x.Id == currentStudent.ParentId))
-                        {
-                            removedStudents.Add(currentStudent.StudentId);
-                            _context.StudentParents.Remove(currentStudent);
-                        }
-                    }
-
-                    currentStudents.RemoveAll(x => removedStudents.Any(y => y == x.StudentId));
-                }
-
-
+                var newStudentParents = new List<StudentParent>();
                 foreach (var newStudent in newStudents)
                 {
-                    if (!currentStudents.Any(x => x.StudentId == newStudent.Id))
+                    newStudentParents.Add(new()
                     {
-                        await _context.StudentParents.AddAsync(new()
-                        {
-                            StudentId = newStudent.Id,
-                            ParentId = parentId
-                        });
-                    }
+                        StudentId = newStudent.Id,
+                        ParentId = parent.Id
+                    });
                 }
+
+                parent.StudentParents = newStudentParents;
 
                 await _context.SaveChangesAsync();
 
