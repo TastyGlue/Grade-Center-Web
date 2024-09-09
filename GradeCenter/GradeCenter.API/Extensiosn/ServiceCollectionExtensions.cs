@@ -68,6 +68,7 @@
             builder.Services.AddTransient<ITeacherService, TeacherService>();
             builder.Services.AddTransient<IStudentService, StudentService>();
             builder.Services.AddTransient<IParentService, ParentService>();
+            builder.Services.AddTransient<IClassService, ClassService>();
 
             // Configure model mapping
             builder.Services.ConfigureMappings();
