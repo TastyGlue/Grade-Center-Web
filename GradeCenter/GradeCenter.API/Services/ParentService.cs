@@ -17,15 +17,18 @@
             if (user == null)
                 return new() { Succeeded = false, Message = "Couldn't find user" };
 
+            // Add user to role
             var userRole = await _userManager.GetRolesAsync(user);
             if (userRole.Count > 0)
-                return new() { Succeeded = false, Message = "User already has a role and can't be assigned to this role" };
-            else
             {
-                var result = await _userManager.AddToRoleAsync(user, "PARENT");
-                if (!result.Succeeded)
-                    return new() { Succeeded = false, Message = "There was an error adding user to the \"PARENT\"" };
+                var removeResult = await _userManager.RemoveFromRolesAsync(user, userRole);
+                if (!removeResult.Succeeded)
+                    return new() { Succeeded = false, Message = "Couldn't remove user's prior roles" };
             }
+
+            var addResult = await _userManager.AddToRoleAsync(user, "PARENT");
+            if (!addResult.Succeeded)
+                return new() { Succeeded = false, Message = "Couldn't add user to \"Parent\"" };
 
             Parent newParent = new()
             {
