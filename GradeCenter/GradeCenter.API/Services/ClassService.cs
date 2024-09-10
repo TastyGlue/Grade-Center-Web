@@ -27,6 +27,15 @@ namespace GradeCenter.API.Services
                     return new() { Succeeded = false, Message = $"Couldn't find teacher with Id {request.ClassTeacherId}" };
             }
 
+            bool isGradeAndSignatureExist = await _context.Classes
+                .AnyAsync(x => 
+                    x.Grade == request.Grade 
+                    && x.Signature.Equals(request.Signature, StringComparison.OrdinalIgnoreCase)
+                    && x.SchoolId.ToString() == request.SchoolId);
+
+            if (isGradeAndSignatureExist)
+                return new() { Succeeded = false, Message = "This class already exists" };
+
             try
             {
                 var newClass = new Class()

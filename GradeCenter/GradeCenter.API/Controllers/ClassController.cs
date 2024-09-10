@@ -11,7 +11,7 @@
             _classService = classService;
         }
 
-        // Class only
+        // Admin only
         [HttpPost]
         public async Task<IActionResult> AddClass([FromBody] AddClassRequest request)
         {
@@ -22,7 +22,7 @@
                 return BadRequest(result.Message);
         }
 
-        // Class only
+        // Admin only
         [HttpPut]
         public async Task<IActionResult> Edit([FromBody] ClassDto classDto)
         {
