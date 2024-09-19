@@ -15,6 +15,9 @@
 
             TypeAdapterConfig<Class, ClassDto>.NewConfig()
                 .MaxDepth(4);
+
+            TypeAdapterConfig<Subject, SubjectDto>.NewConfig()
+                .Map(dest => dest.Teachers, src => src.TeacherSubjects.Select(x => x.Teacher));
         }
     }
 }

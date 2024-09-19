@@ -13,7 +13,7 @@ namespace GradeCenter.API.Services
 
         public async Task<Response<Guid>> Add(AddClassRequest request)
         {
-            var school = await _context.Schools.FirstOrDefaultAsync(x => x.Id.ToString() == request.SchoolId);
+            var school = await _context.Schools.FirstOrDefaultAsync(x => x.Id == request.SchoolId);
             if (school == null)
                 return new() { Succeeded = false, Message = $"Couldn't find school with Id {request.SchoolId}" };
 
@@ -31,7 +31,7 @@ namespace GradeCenter.API.Services
                 .AnyAsync(x => 
                     x.Grade == request.Grade 
                     && x.Signature.Equals(request.Signature, StringComparison.OrdinalIgnoreCase)
-                    && x.SchoolId.ToString() == request.SchoolId);
+                    && x.SchoolId == request.SchoolId);
 
             if (isGradeAndSignatureExist)
                 return new() { Succeeded = false, Message = "This class already exists" };
@@ -57,11 +57,11 @@ namespace GradeCenter.API.Services
             }
         }
 
-        public async Task<Response<string>> Delete(string classId)
+        public async Task<Response<string>> Delete(Guid classId)
         {
             var classObj = await _context.Classes
                 .Include(x => x.Students)
-                .FirstOrDefaultAsync(x => x.Id.ToString() == classId);
+                .FirstOrDefaultAsync(x => x.Id == classId);
             if (classObj == null)
                 return new() { Succeeded = false, Message = $"Couldn't find class with Id {classId}" };
 
@@ -131,7 +131,7 @@ namespace GradeCenter.API.Services
             return classes.Adapt<List<ClassDto>>();
         }
 
-        public async Task<ClassDto?> GetById(string classId)
+        public async Task<ClassDto?> GetById(Guid classId)
         {
             var classObj = await _context.Classes
                 .Include(x => x.School)
@@ -141,7 +141,7 @@ namespace GradeCenter.API.Services
                     .ThenInclude(x => x.User)
                 .Include(x => x.ClassTeacher)
                     .ThenInclude(x => x.User)
-                .FirstOrDefaultAsync(x => x.Id.ToString() == classId);
+                .FirstOrDefaultAsync(x => x.Id == classId);
 
             return classObj?.Adapt<ClassDto>();
         }

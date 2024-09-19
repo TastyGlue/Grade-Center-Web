@@ -14,6 +14,11 @@
         [StringLength(10)]
         public string Signature { get; set; } = default!;
 
+        [Required]
+        public Guid SchoolId { get; set; }
+        [ForeignKey(nameof(SchoolId))]
+        public School School { get; set; } = default!;
+
         public ICollection<TeacherSubject> TeacherSubjects { get; set; } = new List<TeacherSubject>();
     }
 }

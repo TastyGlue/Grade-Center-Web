@@ -17,5 +17,6 @@
         public ICollection<Headmaster> Headmasters { get; set; } = new List<Headmaster>();
         public ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
         public ICollection<Class> Classes { get; set; } = new List<Class>();
+        public ICollection<Subject> Subjects { get; set; } = new List<Subject>();
     }
 }

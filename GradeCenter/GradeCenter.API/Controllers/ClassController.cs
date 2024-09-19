@@ -1,4 +1,6 @@
-﻿namespace GradeCenter.API.Controllers
+﻿using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+
+namespace GradeCenter.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -40,11 +42,19 @@
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(string id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _classService.GetById(id);
 
             return (result == null) ? NotFound() : Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _classService.Delete(id);
+
+            return (result.Succeeded) ? Ok() : BadRequest(result.Message);
         }
     }
 }
