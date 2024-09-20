@@ -84,23 +84,16 @@
 
         public async Task<IEnumerable<HeadmasterDto>> GetAll(string? schoolId)
         {
-            var headmasters = await _context.Headmasters
+            var headmastersQuery = _context.Headmasters
                 .Include(x => x.User)
-                .Include(x => x.School)
-                .ToListAsync();
+                .Include(x => x.School);
 
-            if (schoolId != null)
-            {
-                try
-                {
-                    var filteredResult = headmasters.Where(x => x.SchoolId == new Guid(schoolId)).ToList();
-                    return filteredResult.Adapt<List<HeadmasterDto>>();
-                }
-                catch (Exception)
-                {
-                    return [];
-                }
-            }
+            var headmasters = new List<Headmaster>();
+
+            if (schoolId == null)
+                headmasters = await headmastersQuery.ToListAsync();
+            else
+                headmasters = await headmastersQuery.Where(x => x.SchoolId.ToString() == schoolId).ToListAsync();
 
             return headmasters.Adapt<List<HeadmasterDto>>();
         }

@@ -93,25 +93,18 @@
 
         public async Task<IEnumerable<StudentDto>> GetAll(string? schoolId)
         {
-            var students = await _context.Students
+            var studentsQuery = _context.Students
                 .Include(x => x.User)
                 .Include(x => x.Class)
                     .ThenInclude(x => x.School)
-                .Include(x => x.Grades)
-                .ToListAsync();
+                .Include(x => x.Grades);
 
-            if (schoolId != null)
-            {
-                try
-                {
-                    var filteredResults = students.Where(x => x.Class?.SchoolId == new Guid(schoolId)).ToList();
-                    return filteredResults.Adapt<List<StudentDto>>();
-                }
-                catch (Exception)
-                {
-                    return [];
-                }
-            }
+            var students = new List<Student>();
+
+            if (schoolId == null)
+                students = await studentsQuery.ToListAsync();
+            else
+                students = await studentsQuery.Where(x => x.Class != null && x.Class.SchoolId.ToString() == schoolId).ToListAsync();
 
             return students.Adapt<List<StudentDto>>();
         }

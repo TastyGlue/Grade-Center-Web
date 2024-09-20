@@ -61,17 +61,18 @@
 
         public async Task<IEnumerable<SubjectDto>> GetAll(string? schoolId)
         {
-            var subjects = await _context.Subjects
+            var subjectsQuery = _context.Subjects
                 .Include(x => x.School)
                 .Include(x => x.TeacherSubjects)
                     .ThenInclude(x => x.Teacher)
-                        .ThenInclude(x => x.User)
-                .ToListAsync();
+                        .ThenInclude(x => x.User);
 
-            if (schoolId != null)
-            {
-                subjects = subjects.Where(x => x.SchoolId.ToString() == schoolId).ToList();
-            }
+            var subjects = new List<Subject>();
+
+            if (schoolId == null)
+                subjects = await subjectsQuery.ToListAsync();
+            else
+                subjects = await subjectsQuery.Where(x => x.SchoolId.ToString() == schoolId).ToListAsync();
 
             return subjects.Adapt<List<SubjectDto>>();
         }

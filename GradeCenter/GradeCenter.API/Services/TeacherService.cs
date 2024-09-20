@@ -95,25 +95,18 @@ namespace GradeCenter.API.Services
 
         public async Task<IEnumerable<TeacherDto>> GetAll(string? schoolId)
         {
-            var teachers = await _context.Teachers
+            var teachersQuery = _context.Teachers
                 .Include(x => x.User)
                 .Include(x => x.TeacherSubjects)
                     .ThenInclude(x => x.Subject)
-                .Include(x => x.School)
-                .ToListAsync();
+                .Include(x => x.School);
 
-            if (schoolId != null)
-            {
-                try
-                {
-                    var filteredResults = teachers.Where(x => x.SchoolId == new Guid(schoolId)).ToList();
-                    return filteredResults.Adapt<List<TeacherDto>>();
-                }
-                catch (Exception)
-                {
-                    return [];
-                }
-            }
+            var teachers = new List<Teacher>();
+
+            if (schoolId == null)
+                teachers = await teachersQuery.ToListAsync();
+            else
+                teachers = await teachersQuery.Where(x => x.SchoolId.ToString() == schoolId).ToListAsync();
 
             return teachers.Adapt<List<TeacherDto>>();
         }
