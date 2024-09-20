@@ -11,7 +11,7 @@
             _gradeService = gradeService;
         }
 
-        // Admin only
+        // Admin and Teacher
         [HttpPost]
         public async Task<IActionResult> AddGrade([FromBody] AddGradeRequest request)
         {
@@ -22,7 +22,7 @@
                 return BadRequest(result.Message);
         }
 
-        // Admin only
+        // Admin and Teacher
         [HttpPut]
         public async Task<IActionResult> Edit([FromBody] GradeDto gradeDto)
         {
@@ -47,6 +47,7 @@
             return (result == null) ? NotFound() : Ok(result);
         }
 
+        // Admin and Teacher
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
