@@ -21,6 +21,9 @@
 
             TypeAdapterConfig<Grade, GradeDto>.NewConfig()
                 .MaxDepth(3);
+
+            TypeAdapterConfig<Absence, AbsenceDto>.NewConfig()
+                .MaxDepth(4);
         }
     }
 }

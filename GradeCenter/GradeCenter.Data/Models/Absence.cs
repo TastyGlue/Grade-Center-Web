@@ -17,8 +17,11 @@
         public Subject Subject { get; set; } = default!;
 
         [Required]
-        public DayOfWeek Day { get; set; }
+        public int TimetableId { get; set; }
+        [ForeignKey(nameof(TimetableId))]
+        public Timetable Timetable { get; set; } = default!;
 
-        public DateTime? Time { get; set; }
+        [Required]
+        public DateOnly Date { get; set; }
     }
 }
