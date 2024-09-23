@@ -73,6 +73,7 @@
             builder.Services.AddTransient<ISubjectService, SubjectService>();
             builder.Services.AddTransient<IGradeService, GradeService>();
             builder.Services.AddTransient<IAbsenceService, AbsenceService>();
+            builder.Services.AddTransient<ITimetableService, TimetableService>();
 
             // Configure model mapping
             builder.Services.ConfigureMappings();

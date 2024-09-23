@@ -24,6 +24,9 @@
 
             TypeAdapterConfig<Absence, AbsenceDto>.NewConfig()
                 .MaxDepth(4);
+
+            TypeAdapterConfig<Timetable, TimetableDto>.NewConfig()
+                .MaxDepth(3);
         }
     }
 }

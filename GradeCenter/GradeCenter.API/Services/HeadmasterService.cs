@@ -1,4 +1,6 @@
-﻿namespace GradeCenter.API.Services
+﻿using GradeCenter.Data.Models;
+
+namespace GradeCenter.API.Services
 {
     public class HeadmasterService : IHeadmasterService
     {
@@ -84,16 +86,14 @@
 
         public async Task<IEnumerable<HeadmasterDto>> GetAll(string? schoolId)
         {
-            var headmastersQuery = _context.Headmasters
+            IQueryable<Headmaster> headmastersQuery = _context.Headmasters
                 .Include(x => x.User)
                 .Include(x => x.School);
 
-            var headmasters = new List<Headmaster>();
+            if (schoolId != null)
+                headmastersQuery = headmastersQuery.Where(x => x.SchoolId.ToString() == schoolId);
 
-            if (schoolId == null)
-                headmasters = await headmastersQuery.ToListAsync();
-            else
-                headmasters = await headmastersQuery.Where(x => x.SchoolId.ToString() == schoolId).ToListAsync();
+            var headmasters = await headmastersQuery.ToListAsync();
 
             return headmasters.Adapt<List<HeadmasterDto>>();
         }

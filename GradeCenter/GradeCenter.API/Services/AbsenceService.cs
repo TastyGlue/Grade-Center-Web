@@ -102,7 +102,7 @@
 
         public async Task<IEnumerable<AbsenceDto>> GetAll(int? studentId)
         {
-            var absencesQuery = _context.Absences
+            IQueryable<Absence> absencesQuery = _context.Absences
                 .Include(x => x.Student)
                     .ThenInclude(x => x.User)
                 .Include(x => x.Subject)
@@ -111,7 +111,7 @@
                         .ThenInclude(x => x.User);
 
             if (studentId != null)
-                absencesQuery = (IIncludableQueryable<Absence, User>)absencesQuery.Where(x => x.StudentId == studentId);
+                absencesQuery = absencesQuery.Where(x => x.StudentId == studentId);
 
             var absences = await absencesQuery.ToListAsync();
 

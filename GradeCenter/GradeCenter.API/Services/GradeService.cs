@@ -100,7 +100,7 @@ namespace GradeCenter.API.Services
 
         public async Task<IEnumerable<GradeDto>> GetAll(string? subjectId, int? teacherId)
         {
-            var gradesQuery = _context.Grades
+            IQueryable<Grade> gradesQuery = _context.Grades
                 .Include(x => x.Student)
                     .ThenInclude(x => x.User)
                 .Include(x => x.Subject)
@@ -108,10 +108,10 @@ namespace GradeCenter.API.Services
                     .ThenInclude(x => x.User);
 
             if (subjectId != null)
-                gradesQuery = (IIncludableQueryable<Grade, User>)gradesQuery.Where(x => x.SubjectId.ToString() == subjectId);
+                gradesQuery = gradesQuery.Where(x => x.SubjectId.ToString() == subjectId);
 
             if (teacherId != null)
-                gradesQuery = (IIncludableQueryable<Grade, User>)gradesQuery.Where(x => x.TeacherId == teacherId);
+                gradesQuery = gradesQuery.Where(x => x.TeacherId == teacherId);
 
             var grades = await gradesQuery.ToListAsync();
 

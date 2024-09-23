@@ -1,4 +1,6 @@
-﻿namespace GradeCenter.API.Services
+﻿using GradeCenter.Data.Models;
+
+namespace GradeCenter.API.Services
 {
     public class SubjectService : ISubjectService
     {
@@ -61,18 +63,16 @@
 
         public async Task<IEnumerable<SubjectDto>> GetAll(string? schoolId)
         {
-            var subjectsQuery = _context.Subjects
+            IQueryable<Subject> subjectsQuery = _context.Subjects
                 .Include(x => x.School)
                 .Include(x => x.TeacherSubjects)
                     .ThenInclude(x => x.Teacher)
                         .ThenInclude(x => x.User);
 
-            var subjects = new List<Subject>();
+            if (schoolId != null)
+                subjectsQuery = subjectsQuery.Where(x => x.SchoolId.ToString() == schoolId);
 
-            if (schoolId == null)
-                subjects = await subjectsQuery.ToListAsync();
-            else
-                subjects = await subjectsQuery.Where(x => x.SchoolId.ToString() == schoolId).ToListAsync();
+            var subjects = await subjectsQuery.ToListAsync();
 
             return subjects.Adapt<List<SubjectDto>>();
         }
