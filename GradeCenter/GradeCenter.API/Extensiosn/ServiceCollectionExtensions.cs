@@ -5,7 +5,7 @@
         public static WebApplicationBuilder RegisterServices(this WebApplicationBuilder builder)
         {
             // Configuration of identity system
-            builder.Services.AddIdentity<User, IdentityRole>(options =>
+            builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = false;
@@ -19,7 +19,7 @@
             })
                 .AddEntityFrameworkStores<GradeCenterDbContext>() // Tying the identity to the database context
                 .AddUserManager<UserManager<User>>()
-                .AddRoleManager<RoleManager<IdentityRole>>()
+                .AddRoleManager<RoleManager<IdentityRole<Guid>>>()
                 .AddDefaultTokenProviders();
 
             // Configuring connection to the PostgreSql database

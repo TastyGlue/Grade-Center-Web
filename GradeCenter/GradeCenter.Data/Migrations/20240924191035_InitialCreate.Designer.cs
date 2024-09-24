@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GradeCenter.Data.Migrations
 {
     [DbContext(typeof(GradeCenterDbContext))]
-    [Migration("20240919155735_AddedSchoolIdToSubject")]
-    partial class AddedSchoolIdToSubject
+    [Migration("20240924191035_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,23 +27,21 @@ namespace GradeCenter.Data.Migrations
 
             modelBuilder.Entity("GradeCenter.Data.Models.Absence", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
 
-                    b.Property<int>("Day")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("SubjectId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("Time")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<Guid>("TimetableId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -51,24 +49,17 @@ namespace GradeCenter.Data.Migrations
 
                     b.HasIndex("SubjectId");
 
+                    b.HasIndex("TimetableId");
+
                     b.ToTable("Absences");
                 });
 
             modelBuilder.Entity("GradeCenter.Data.Models.Admin", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Admins");
                 });
@@ -79,8 +70,8 @@ namespace GradeCenter.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("ClassTeacherId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("ClassTeacherId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Grade")
                         .HasColumnType("integer");
@@ -104,11 +95,9 @@ namespace GradeCenter.Data.Migrations
 
             modelBuilder.Entity("GradeCenter.Data.Models.Grade", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("Date")
                         .HasColumnType("timestamp with time zone");
@@ -117,14 +106,14 @@ namespace GradeCenter.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("StudentId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("SubjectId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("TeacherId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -139,43 +128,25 @@ namespace GradeCenter.Data.Migrations
 
             modelBuilder.Entity("GradeCenter.Data.Models.Headmaster", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("SchoolId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("SchoolId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Headmasters");
                 });
 
             modelBuilder.Entity("GradeCenter.Data.Models.Parent", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Parents");
                 });
@@ -196,9 +167,8 @@ namespace GradeCenter.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -228,35 +198,26 @@ namespace GradeCenter.Data.Migrations
 
             modelBuilder.Entity("GradeCenter.Data.Models.Student", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("ClassId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ClassId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Students");
                 });
 
             modelBuilder.Entity("GradeCenter.Data.Models.StudentParent", b =>
                 {
-                    b.Property<int>("StudentId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("ParentId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ParentId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("StudentId", "ParentId");
 
@@ -293,32 +254,23 @@ namespace GradeCenter.Data.Migrations
 
             modelBuilder.Entity("GradeCenter.Data.Models.Teacher", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("SchoolId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("SchoolId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Teachers");
                 });
 
             modelBuilder.Entity("GradeCenter.Data.Models.TeacherSubject", b =>
                 {
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("TeacherId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("SubjectId")
                         .HasColumnType("uuid");
@@ -332,11 +284,9 @@ namespace GradeCenter.Data.Migrations
 
             modelBuilder.Entity("GradeCenter.Data.Models.Timetable", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("ClassId")
                         .HasColumnType("uuid");
@@ -353,8 +303,8 @@ namespace GradeCenter.Data.Migrations
                     b.Property<Guid>("SubjectId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("TeacherId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Year")
                         .IsRequired()
@@ -374,8 +324,9 @@ namespace GradeCenter.Data.Migrations
 
             modelBuilder.Entity("GradeCenter.Data.Models.User", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
@@ -452,10 +403,11 @@ namespace GradeCenter.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -478,7 +430,7 @@ namespace GradeCenter.Data.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -492,9 +444,8 @@ namespace GradeCenter.Data.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("text");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -503,7 +454,7 @@ namespace GradeCenter.Data.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -517,9 +468,8 @@ namespace GradeCenter.Data.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -528,7 +478,7 @@ namespace GradeCenter.Data.Migrations
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("text");
@@ -539,9 +489,8 @@ namespace GradeCenter.Data.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -550,13 +499,13 @@ namespace GradeCenter.Data.Migrations
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("text");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -565,10 +514,10 @@ namespace GradeCenter.Data.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("text");
@@ -598,16 +547,24 @@ namespace GradeCenter.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("GradeCenter.Data.Models.Timetable", "Timetable")
+                        .WithMany()
+                        .HasForeignKey("TimetableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Student");
 
                     b.Navigation("Subject");
+
+                    b.Navigation("Timetable");
                 });
 
             modelBuilder.Entity("GradeCenter.Data.Models.Admin", b =>
                 {
                     b.HasOne("GradeCenter.Data.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -660,15 +617,15 @@ namespace GradeCenter.Data.Migrations
 
             modelBuilder.Entity("GradeCenter.Data.Models.Headmaster", b =>
                 {
-                    b.HasOne("GradeCenter.Data.Models.School", "School")
-                        .WithMany("Headmasters")
-                        .HasForeignKey("SchoolId")
+                    b.HasOne("GradeCenter.Data.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GradeCenter.Data.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                    b.HasOne("GradeCenter.Data.Models.School", "School")
+                        .WithMany("Headmasters")
+                        .HasForeignKey("SchoolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -681,7 +638,7 @@ namespace GradeCenter.Data.Migrations
                 {
                     b.HasOne("GradeCenter.Data.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -696,7 +653,7 @@ namespace GradeCenter.Data.Migrations
 
                     b.HasOne("GradeCenter.Data.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -737,15 +694,15 @@ namespace GradeCenter.Data.Migrations
 
             modelBuilder.Entity("GradeCenter.Data.Models.Teacher", b =>
                 {
-                    b.HasOne("GradeCenter.Data.Models.School", "School")
-                        .WithMany("Teachers")
-                        .HasForeignKey("SchoolId")
+                    b.HasOne("GradeCenter.Data.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GradeCenter.Data.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                    b.HasOne("GradeCenter.Data.Models.School", "School")
+                        .WithMany("Teachers")
+                        .HasForeignKey("SchoolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -800,16 +757,16 @@ namespace GradeCenter.Data.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.HasOne("GradeCenter.Data.Models.User", null)
                         .WithMany()
@@ -818,7 +775,7 @@ namespace GradeCenter.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.HasOne("GradeCenter.Data.Models.User", null)
                         .WithMany()
@@ -827,9 +784,9 @@ namespace GradeCenter.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -842,7 +799,7 @@ namespace GradeCenter.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
                     b.HasOne("GradeCenter.Data.Models.User", null)
                         .WithMany()

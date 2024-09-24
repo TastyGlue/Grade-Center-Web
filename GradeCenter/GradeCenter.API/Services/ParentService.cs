@@ -10,10 +10,10 @@
             _userManager = userManager;
             _context = context;
         }
-        public async Task<Response<int>> AddParent(AddParentRequest request)
+        public async Task<Response<Guid>> AddParent(AddParentRequest request)
         {
             // Find user in database
-            var user = await _userManager.FindByIdAsync(request.UserId);
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
             if (user == null)
                 return new() { Succeeded = false, Message = "Couldn't find user" };
 
@@ -96,14 +96,14 @@
             return parents.Adapt<List<ParentDto>>();
         }
 
-        public async Task<ParentDto?> GetById(int id)
+        public async Task<ParentDto?> GetById(Guid id)
         {
             var parent = await _context.Parents
                 .Include(x => x.User)
                 .Include(x => x.StudentParents)
                     .ThenInclude(x => x.Student)
                         .ThenInclude(x => x.User)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             return parent?.Adapt<ParentDto>();
         }

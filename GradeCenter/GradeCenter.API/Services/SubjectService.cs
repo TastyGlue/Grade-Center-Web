@@ -61,7 +61,7 @@ namespace GradeCenter.API.Services
             }
         }
 
-        public async Task<IEnumerable<SubjectDto>> GetAll(string? schoolId)
+        public async Task<IEnumerable<SubjectDto>> GetAll(Guid? schoolId)
         {
             IQueryable<Subject> subjectsQuery = _context.Subjects
                 .Include(x => x.School)
@@ -70,7 +70,7 @@ namespace GradeCenter.API.Services
                         .ThenInclude(x => x.User);
 
             if (schoolId != null)
-                subjectsQuery = subjectsQuery.Where(x => x.SchoolId.ToString() == schoolId);
+                subjectsQuery = subjectsQuery.Where(x => x.SchoolId == schoolId);
 
             var subjects = await subjectsQuery.ToListAsync();
 

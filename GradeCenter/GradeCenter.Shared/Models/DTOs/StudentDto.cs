@@ -2,7 +2,7 @@
 {
     public class StudentDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public UserDto User { get; set; } = default!;
         public ClassDto? Class { get; set; }
         public List<ParentDto> Parents { get; set; } = [];

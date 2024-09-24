@@ -2,7 +2,7 @@
 {
     public class AddParentRequest
     {
-        public string UserId { get; set; } = default!;
-        public List<int> StudentIds { get; set; } = [];
+        public Guid UserId { get; set; }
+        public List<Guid> StudentIds { get; set; } = [];
     }
 }

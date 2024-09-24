@@ -36,7 +36,7 @@
         private async Task SeedUser(DbContext context, Guid userId, DateOnly dateOfBirth, string address, string fullName, string roleName)
         {
             //Check if data is already seeded
-            bool isExist = await context.Set<User>().AnyAsync(x => x.Id == userId.ToString());
+            bool isExist = await context.Set<User>().AnyAsync(x => x.Id == userId);
 
             if (!isExist)
             {
@@ -46,7 +46,7 @@
                 //Create data to be seeded
                 var user = new User
                 {
-                    Id = userId.ToString(),
+                    Id = userId,
                     UserName = username,
                     NormalizedUserName = username.ToUpper(),
                     DateOfBirth = dateOfBirth,
@@ -63,11 +63,11 @@
                 await context.Set<User>().AddAsync(user);
 
                 //Get role by roleName
-                var role = await context.Set<IdentityRole>().FirstOrDefaultAsync(x => x.NormalizedName == roleName.ToUpper());
+                var role = await context.Set<IdentityRole<Guid>>().FirstOrDefaultAsync(x => x.NormalizedName == roleName.ToUpper());
                 if (role != null)
                 {
                     //Add user to role
-                    context.Set<IdentityUserRole<string>>().Add(new IdentityUserRole<string>
+                    context.Set<IdentityUserRole<Guid>>().Add(new IdentityUserRole<Guid>
                     {
                         UserId = user.Id,
                         RoleId = role.Id

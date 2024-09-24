@@ -3,11 +3,11 @@
     public class TokenService : ITokenService
     {
         private readonly IConfiguration _config;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<IdentityRole<Guid>> _roleManager;
         private readonly byte[] securityKey;
         private readonly int tokenExpirationInMinutes;
 
-        public TokenService(IConfiguration config, RoleManager<IdentityRole> roleManager)
+        public TokenService(IConfiguration config, RoleManager<IdentityRole<Guid>> roleManager)
         {
             _config = config;
             _roleManager = roleManager;
@@ -22,7 +22,7 @@
             // Make a list of claims included in the token
             var claims = new List<Claim>()
             {
-                new(ClaimTypes.NameIdentifier, user.Id),
+                new(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new(ClaimTypes.Name, user.FullName),
                 new(ClaimTypes.Email, user.Email!)
             };
@@ -89,7 +89,7 @@
 
             return new TokenContent()
             {
-                UserId = userId,
+                UserId = new Guid(userId),
                 Email = email,
                 FullName = fullName,
                 Role = role

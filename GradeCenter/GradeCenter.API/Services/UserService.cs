@@ -1,6 +1,4 @@
-﻿using Mapster;
-
-namespace GradeCenter.API.Services
+﻿namespace GradeCenter.API.Services
 {
     public class UserService : IUserService
     {
@@ -15,7 +13,7 @@ namespace GradeCenter.API.Services
             _tokenService = tokenService;
         }
 
-        public async Task<Response<string>> AddUser(AddUserRequest user)
+        public async Task<Response<Guid>> AddUser(AddUserRequest user)
         {
             // Check if someone is already registered with this email
             var isEmailExist = await _userManager.FindByEmailAsync(user.Email.ToUpper()) != null;
@@ -77,7 +75,7 @@ namespace GradeCenter.API.Services
                 return new() { Succeeded = false, Message = "Authentication failed" };
 
             // Check if user exists in the database
-            var user = await _userManager.FindByIdAsync(userDto.Id);
+            var user = await _userManager.FindByIdAsync(userDto.Id.ToString());
             if (user == null)
                 return new() { Succeeded = false, Message = "Couldn't find user" };
 
@@ -144,9 +142,9 @@ namespace GradeCenter.API.Services
             return users.Adapt<List<UserDto>>();
         }
 
-        public async Task<UserDto?> GetById(string id)
+        public async Task<UserDto?> GetById(Guid id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(id.ToString());
 
             return user?.Adapt<UserDto>();
         }
@@ -162,9 +160,9 @@ namespace GradeCenter.API.Services
             return users.Adapt<List<UserDto>>();
         }
 
-        public async Task<Response<bool>> RemoveFromRole(string userId)
+        public async Task<Response<bool>> RemoveFromRole(Guid userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null)
                 return new() { Succeeded = false, Message = "Couldn't find user" };
 

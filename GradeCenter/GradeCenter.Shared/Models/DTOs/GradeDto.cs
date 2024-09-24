@@ -2,7 +2,7 @@
 {
     public class GradeDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public StudentDto Student { get; set; } = default!;
         public SubjectDto Subject { get; set; } = default!;
         public TeacherDto Teacher { get; set; } = default!;

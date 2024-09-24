@@ -1,6 +1,4 @@
-﻿using GradeCenter.Data.Models;
-
-namespace GradeCenter.API.Services
+﻿namespace GradeCenter.API.Services
 {
     public class StudentService : IStudentService
     {
@@ -12,10 +10,10 @@ namespace GradeCenter.API.Services
             _userManager = userManager;
             _context = context;
         }
-        public async Task<Response<int>> AddStudent(AddStudentRequest request)
+        public async Task<Response<Guid>> AddStudent(AddStudentRequest request)
         {
             // Find user in database
-            var user = await _userManager.FindByIdAsync(request.UserId);
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
             if (user == null)
                 return new() { Succeeded = false, Message = "Couldn't find user" };
 
@@ -33,7 +31,7 @@ namespace GradeCenter.API.Services
                 return new() { Succeeded = false, Message = "Couldn't find school" };
 
             // Check if the user is already a student in the school
-            bool isUserStudentInSchool = school.Classes.Any(x => x.Students.Any(y => y.UserId == request.UserId));
+            bool isUserStudentInSchool = school.Classes.Any(x => x.Students.Any(y => y.Id == request.UserId));
             if (isUserStudentInSchool)
                 return new() { Succeeded = false, Message = "User is already registered as a student in this school" };
 
@@ -79,8 +77,8 @@ namespace GradeCenter.API.Services
 
             try
             {
-                if (student.ClassId == studentDto.Class.Id)
-                    student.ClassId = studentDto.Class.Id;
+                if (student.ClassId != studentDto.Class?.Id)
+                    student.ClassId = studentDto.Class?.Id;
 
                 _context.Entry(student).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
@@ -93,7 +91,7 @@ namespace GradeCenter.API.Services
             return new() { Succeeded = true };
         }
 
-        public async Task<IEnumerable<StudentDto>> GetAll(string? schoolId)
+        public async Task<IEnumerable<StudentDto>> GetAll(Guid? schoolId)
         {
             IQueryable<Student> studentsQuery = _context.Students
                 .Include(x => x.User)
@@ -102,14 +100,14 @@ namespace GradeCenter.API.Services
                 .Include(x => x.Grades);
 
             if (schoolId != null)
-                studentsQuery = studentsQuery.Where(x => x.Class != null && x.Class.SchoolId.ToString() == schoolId);
+                studentsQuery = studentsQuery.Where(x => x.Class != null && x.Class.SchoolId == schoolId);
 
             var students = await studentsQuery.ToListAsync();
 
             return students.Adapt<List<StudentDto>>();
         }
 
-        public async Task<StudentDto?> GetById(int id)
+        public async Task<StudentDto?> GetById(Guid id)
         {
             var student = await _context.Students
                 .Include(x => x.User)

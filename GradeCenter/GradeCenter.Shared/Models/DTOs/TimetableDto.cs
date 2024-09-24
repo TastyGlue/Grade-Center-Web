@@ -2,7 +2,7 @@
 {
     public class TimetableDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public ClassDto Class { get; set; } = default!;
         public SubjectDto Subject { get; set; } = default!;
         public TeacherDto Teacher { get; set; } = default!;

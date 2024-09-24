@@ -12,7 +12,7 @@
             _userManager = userManager;
             _tokenService = tokenService;
         }
-        public async Task<Response<int>> Add(AddAbsenceRequest request)
+        public async Task<Response<Guid>> Add(AddAbsenceRequest request)
         {
             var student = await _context.Students.FirstOrDefaultAsync(x => x.Id == request.StudentId);
             if (student == null)
@@ -53,7 +53,7 @@
             }
         }
 
-        public async Task<Response<string>> Delete(int absenceId)
+        public async Task<Response<string>> Delete(Guid absenceId)
         {
             var absence = await _context.Absences.FirstOrDefaultAsync(x => x.Id == absenceId);
             if (absence == null)
@@ -100,7 +100,7 @@
             }
         }
 
-        public async Task<IEnumerable<AbsenceDto>> GetAll(int? studentId)
+        public async Task<IEnumerable<AbsenceDto>> GetAll(Guid? studentId)
         {
             IQueryable<Absence> absencesQuery = _context.Absences
                 .Include(x => x.Student)
@@ -118,7 +118,7 @@
             return absences.Adapt<List<AbsenceDto>>();
         }
 
-        public async Task<AbsenceDto?> GetById(int absenceId)
+        public async Task<AbsenceDto?> GetById(Guid absenceId)
         {
             var absence = await _context.Absences
                 .Include(x => x.Student)

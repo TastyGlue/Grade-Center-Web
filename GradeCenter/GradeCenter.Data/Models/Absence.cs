@@ -4,10 +4,10 @@
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
-        public int StudentId { get; set; }
+        public Guid StudentId { get; set; }
         [ForeignKey(nameof(StudentId))]
         public Student Student { get; set; } = default!;
 
@@ -17,7 +17,7 @@
         public Subject Subject { get; set; } = default!;
 
         [Required]
-        public int TimetableId { get; set; }
+        public Guid TimetableId { get; set; }
         [ForeignKey(nameof(TimetableId))]
         public Timetable Timetable { get; set; } = default!;
 

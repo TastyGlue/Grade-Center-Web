@@ -18,7 +18,7 @@
         [StringLength(2)]
         public string Signature { get; set; } = default!;
 
-        public int? ClassTeacherId { get; set; }
+        public Guid? ClassTeacherId { get; set; }
         [ForeignKey(nameof(ClassTeacherId))]
         public Teacher? ClassTeacher { get; set; }
 

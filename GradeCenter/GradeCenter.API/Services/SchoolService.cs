@@ -46,11 +46,11 @@ namespace GradeCenter.API.Services
             }
         }
 
-        public async Task<Response<string>> Delete(string schoolId)
+        public async Task<Response<string>> Delete(Guid schoolId)
         {
             try
             {
-                var school = await _context.Schools.FirstOrDefaultAsync(x => x.Id.ToString() == schoolId);
+                var school = await _context.Schools.FirstOrDefaultAsync(x => x.Id == schoolId);
                 if (school == null)
                     return new() { Succeeded = false, Message = $"Couldn't find school with Id {schoolId}" };
 
@@ -92,12 +92,12 @@ namespace GradeCenter.API.Services
             return schools.Adapt<List<SchoolDto>>();
         }
 
-        public async Task<SchoolDto?> GetById(string schoolId)
+        public async Task<SchoolDto?> GetById(Guid schoolId)
         {
             var school = await _context.Schools
                 .Include(x => x.Headmasters)
                     .ThenInclude(x => x.User)
-                .FirstOrDefaultAsync(x => x.Id.ToString() == schoolId);
+                .FirstOrDefaultAsync(x => x.Id == schoolId);
 
             return school?.Adapt<SchoolDto>();
         }

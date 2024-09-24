@@ -2,10 +2,10 @@
 {
     public interface IGradeService
     {
-        Task<Response<int>> Add(AddGradeRequest request);
+        Task<Response<Guid>> Add(AddGradeRequest request);
         Task<Response<string>> Edit(GradeDto gradeDto);
-        Task<IEnumerable<GradeDto>> GetAll(string? subjectId, int? teacherId);
-        Task<GradeDto?> GetById(int gradeId);
-        Task<Response<string>> Delete(int gradeId);
+        Task<IEnumerable<GradeDto>> GetAll(Guid? subjectId, Guid? teacherId);
+        Task<GradeDto?> GetById(Guid gradeId);
+        Task<Response<string>> Delete(Guid gradeId);
     }
 }

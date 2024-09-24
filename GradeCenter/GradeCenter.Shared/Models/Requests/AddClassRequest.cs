@@ -5,6 +5,6 @@
         public Guid SchoolId { get; set; } = default!;
         public int Grade { get; set; }
         public string Signature { get; set; } = default!;
-        public int? ClassTeacherId { get; set; }
+        public Guid? ClassTeacherId { get; set; }
     }
 }

@@ -32,7 +32,7 @@
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StudentDto>>> GetAll([FromQuery] string? schoolId = null)
+        public async Task<ActionResult<IEnumerable<StudentDto>>> GetAll([FromQuery] Guid? schoolId = null)
         {
             var result = await _studentService.GetAll(schoolId);
 
@@ -40,7 +40,7 @@
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _studentService.GetById(id);
 

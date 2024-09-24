@@ -2,9 +2,9 @@
 {
     public interface IHeadmasterService
     {
-        Task<Response<int>> AddHeadmaster(AddHeadmasterRequest request);
+        Task<Response<Guid>> AddHeadmaster(AddHeadmasterRequest request);
         Task<Response<string>> Edit(HeadmasterDto headmasterDto);
-        Task<IEnumerable<HeadmasterDto>> GetAll(string? schoolId);
-        Task<HeadmasterDto?> GetById(int id);
+        Task<IEnumerable<HeadmasterDto>> GetAll(Guid? schoolId);
+        Task<HeadmasterDto?> GetById(Guid id);
     }
 }

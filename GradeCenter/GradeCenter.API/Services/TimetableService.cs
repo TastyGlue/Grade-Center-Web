@@ -1,8 +1,4 @@
-﻿
-using GradeCenter.Data.Models;
-using GradeCenter.Shared.Models.DTOs;
-
-namespace GradeCenter.API.Services
+﻿namespace GradeCenter.API.Services
 {
     public class TimetableService : ITimetableService
     {
@@ -13,7 +9,7 @@ namespace GradeCenter.API.Services
             _context = context;
         }
 
-        public async Task<Response<int>> Add(AddTimetableRequest request)
+        public async Task<Response<Guid>> Add(AddTimetableRequest request)
         {
             var classObj = await _context.Classes.FirstOrDefaultAsync(x => x.Id == request.ClassId);
             if (classObj == null)
@@ -59,7 +55,7 @@ namespace GradeCenter.API.Services
             }
         }
 
-        public async Task<Response<string>> Delete(int timetableId)
+        public async Task<Response<string>> Delete(Guid timetableId)
         {
             var timetable = await _context.Timetables.FirstOrDefaultAsync(x => x.Id == timetableId);
             if (timetable == null)
@@ -109,7 +105,7 @@ namespace GradeCenter.API.Services
             }
         }
 
-        public async Task<IEnumerable<TimetableDto>> GetAll(Guid? classId, int? teacherId)
+        public async Task<IEnumerable<TimetableDto>> GetAll(Guid? classId, Guid? teacherId)
         {
             IQueryable<Timetable> timetablesQuery = _context.Timetables
                 .Include(x => x.Class)
@@ -128,7 +124,7 @@ namespace GradeCenter.API.Services
             return timetables.Adapt<List<TimetableDto>>();
         }
 
-        public async Task<TimetableDto?> GetById(int timetableId)
+        public async Task<TimetableDto?> GetById(Guid timetableId)
         {
             var timetable = await _context.Timetables
                 .Include(x => x.Class)

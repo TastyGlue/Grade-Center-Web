@@ -1,8 +1,4 @@
-﻿
-using GradeCenter.Data.Models;
-using GradeCenter.Shared.Models.DTOs;
-
-namespace GradeCenter.API.Services
+﻿namespace GradeCenter.API.Services
 {
     public class GradeService : IGradeService
     {
@@ -17,7 +13,7 @@ namespace GradeCenter.API.Services
             _tokenService = tokenService;
         }
 
-        public async Task<Response<int>> Add(AddGradeRequest request)
+        public async Task<Response<Guid>> Add(AddGradeRequest request)
         {
             var student = await _context.Students.FirstOrDefaultAsync(x => x.Id == request.StudentId);
             if (student == null)
@@ -53,7 +49,7 @@ namespace GradeCenter.API.Services
             }
         }
 
-        public async Task<Response<string>> Delete(int gradeId)
+        public async Task<Response<string>> Delete(Guid gradeId)
         {
             var grade = await _context.Grades.FirstOrDefaultAsync(x => x.Id == gradeId);
             if (grade == null)
@@ -98,7 +94,7 @@ namespace GradeCenter.API.Services
             }
         }
 
-        public async Task<IEnumerable<GradeDto>> GetAll(string? subjectId, int? teacherId)
+        public async Task<IEnumerable<GradeDto>> GetAll(Guid? subjectId, Guid? teacherId)
         {
             IQueryable<Grade> gradesQuery = _context.Grades
                 .Include(x => x.Student)
@@ -108,7 +104,7 @@ namespace GradeCenter.API.Services
                     .ThenInclude(x => x.User);
 
             if (subjectId != null)
-                gradesQuery = gradesQuery.Where(x => x.SubjectId.ToString() == subjectId);
+                gradesQuery = gradesQuery.Where(x => x.SubjectId == subjectId);
 
             if (teacherId != null)
                 gradesQuery = gradesQuery.Where(x => x.TeacherId == teacherId);
@@ -118,7 +114,7 @@ namespace GradeCenter.API.Services
             return grades.Adapt<List<GradeDto>>();
         }
 
-        public async Task<GradeDto?> GetById(int gradeId)
+        public async Task<GradeDto?> GetById(Guid gradeId)
         {
             var grade = await _context.Grades
                 .Include(x => x.Student)

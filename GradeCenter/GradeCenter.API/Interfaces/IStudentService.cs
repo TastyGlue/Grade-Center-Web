@@ -2,9 +2,9 @@
 {
     public interface IStudentService
     {
-        Task<Response<int>> AddStudent(AddStudentRequest request);
+        Task<Response<Guid>> AddStudent(AddStudentRequest request);
         Task<Response<string>> Edit(StudentDto studentDto);
-        Task<IEnumerable<StudentDto>> GetAll(string? schoolId);
-        Task<StudentDto?> GetById(int id);
+        Task<IEnumerable<StudentDto>> GetAll(Guid? schoolId);
+        Task<StudentDto?> GetById(Guid id);
     }
 }

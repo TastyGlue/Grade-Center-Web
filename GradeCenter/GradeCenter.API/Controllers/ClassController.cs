@@ -34,7 +34,7 @@ namespace GradeCenter.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ClassDto>>> GetAll([FromQuery] string? schoolId = null)
+        public async Task<ActionResult<IEnumerable<ClassDto>>> GetAll([FromQuery] Guid? schoolId = null)
         {
             var result = await _classService.GetAll(schoolId);
 

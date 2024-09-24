@@ -2,9 +2,9 @@
 {
     public interface IAdminService
     {
-        Task<Response<int>> AddAdmin(string userId);
+        Task<Response<Guid>> AddAdmin(Guid userId);
         Task<Response<string>> Edit(AdminDto adminDto);
         Task<IEnumerable<AdminDto>> GetAll();
-        Task<AdminDto?> GetById(int id);
+        Task<AdminDto?> GetById(Guid id);
     }
 }

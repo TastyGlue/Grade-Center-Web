@@ -1,6 +1,4 @@
-﻿using GradeCenter.Data.Models;
-
-namespace GradeCenter.API.Services
+﻿namespace GradeCenter.API.Services
 {
     public class ClassService : IClassService
     {
@@ -111,7 +109,7 @@ namespace GradeCenter.API.Services
             return new() { Succeeded = true };
         }
 
-        public async Task<IEnumerable<ClassDto>> GetAll(string? schoolId)
+        public async Task<IEnumerable<ClassDto>> GetAll(Guid? schoolId)
         {
             IQueryable<Class> classesQuery = _context.Classes
                 .Include(x => x.School)
@@ -123,7 +121,7 @@ namespace GradeCenter.API.Services
                     .ThenInclude(x => x.User);
 
             if (schoolId != null)
-                classesQuery = classesQuery.Where(x => x.SchoolId.ToString() == schoolId);
+                classesQuery = classesQuery.Where(x => x.SchoolId == schoolId);
 
             var classes = await classesQuery.ToListAsync();
 

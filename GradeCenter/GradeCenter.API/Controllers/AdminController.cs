@@ -13,7 +13,7 @@
 
         // Admin only
         [HttpPost]
-        public async Task<IActionResult> AddAdmin([FromBody] string userId)
+        public async Task<IActionResult> AddAdmin([FromBody] Guid userId)
         {
             var result = await _adminService.AddAdmin(userId);
             if (result.Succeeded)
@@ -42,7 +42,7 @@
 
         // Admin only
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _adminService.GetById(id);
 

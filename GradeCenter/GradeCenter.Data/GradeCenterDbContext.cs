@@ -1,6 +1,6 @@
 ﻿namespace GradeCenter.Data
 {
-    public class GradeCenterDbContext : IdentityDbContext<User>
+    public class GradeCenterDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         public GradeCenterDbContext(DbContextOptions<GradeCenterDbContext> options) : base(options)
         {

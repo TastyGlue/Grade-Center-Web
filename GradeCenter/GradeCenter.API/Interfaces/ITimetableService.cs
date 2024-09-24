@@ -2,10 +2,10 @@
 {
     public interface ITimetableService
     {
-        Task<Response<int>> Add(AddTimetableRequest request);
+        Task<Response<Guid>> Add(AddTimetableRequest request);
         Task<Response<string>> Edit(TimetableDto timetableDto);
-        Task<IEnumerable<TimetableDto>> GetAll(Guid? classId, int? teacherId);
-        Task<TimetableDto?> GetById(int timetableId);
-        Task<Response<string>> Delete(int timetableId);
+        Task<IEnumerable<TimetableDto>> GetAll(Guid? classId, Guid? teacherId);
+        Task<TimetableDto?> GetById(Guid timetableId);
+        Task<Response<string>> Delete(Guid timetableId);
     }
 }

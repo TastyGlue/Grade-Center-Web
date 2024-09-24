@@ -4,6 +4,6 @@
     {
         public string Name { get; set; } = default!;
         public string Address { get; set; } = default!;
-        public int? HeadmasterId { get; set; }
+        public Guid? HeadmasterId { get; set; }
     }
 }

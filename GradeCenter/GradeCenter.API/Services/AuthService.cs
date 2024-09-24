@@ -47,7 +47,7 @@
             if (DateTime.UtcNow > token.ExpireOn)
                 return null;
 
-            var user = await _userManager.FindByIdAsync(token.UserId);
+            var user = await _userManager.FindByIdAsync(token.UserId.ToString());
 
             if (user == null)
                 return null;
@@ -79,7 +79,7 @@
             return new TokensResponse(accessToken, refreshToken);
         }
 
-        private async Task SaveRefreshTokenToDb(string userId, string refreshToken)
+        private async Task SaveRefreshTokenToDb(Guid userId, string refreshToken)
         {
             // Add refresh token to database
             _context.RefreshTokens.Add(new()

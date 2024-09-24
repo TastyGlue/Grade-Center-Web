@@ -64,7 +64,7 @@
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(string id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _userService.GetById(id);
 
@@ -73,7 +73,7 @@
 
         // Admin only
         [HttpPost("{userId}")]
-        public async Task<IActionResult> RemoveFromRole(string userId)
+        public async Task<IActionResult> RemoveFromRole(Guid userId)
         {
             var result = await _userService.RemoveFromRole(userId);
 

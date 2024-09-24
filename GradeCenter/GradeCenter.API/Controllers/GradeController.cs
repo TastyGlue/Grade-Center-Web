@@ -32,7 +32,7 @@
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GradeDto>>> GetAll([FromQuery] string? classId = null, [FromQuery] int? teacherId = null)
+        public async Task<ActionResult<IEnumerable<GradeDto>>> GetAll([FromQuery] Guid? classId = null, [FromQuery] Guid? teacherId = null)
         {
             var result = await _gradeService.GetAll(classId, teacherId);
 
@@ -40,7 +40,7 @@
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _gradeService.GetById(id);
 
@@ -49,7 +49,7 @@
 
         // Admin and Teacher
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var result = await _gradeService.Delete(id);
 

@@ -2,9 +2,9 @@
 {
     public class AddAbsenceRequest
     {
-        public int StudentId { get; set; }
+        public Guid StudentId { get; set; }
         public Guid SubjectId { get; set; }
-        public int TimetableId { get; set; }
+        public Guid TimetableId { get; set; }
         public DateOnly Date { get; set; }
     }
 }

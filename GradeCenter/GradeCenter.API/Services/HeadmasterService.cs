@@ -13,10 +13,10 @@ namespace GradeCenter.API.Services
             _context = context;
         }
 
-        public async Task<Response<int>> AddHeadmaster(AddHeadmasterRequest request)
+        public async Task<Response<Guid>> AddHeadmaster(AddHeadmasterRequest request)
         {
             // Find user in database
-            var user = await _userManager.FindByIdAsync(request.UserId);
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
             if (user == null)
                 return new() { Succeeded = false, Message = "Couldn't find user" };
 
@@ -26,7 +26,7 @@ namespace GradeCenter.API.Services
                 return new() { Succeeded = false, Message = "Couldn't find school" };
 
             // Check if the user is already a headmaster at the school
-            bool isUserHeadmasterInSchool = school.Headmasters.Any(x => x.UserId == request.UserId);
+            bool isUserHeadmasterInSchool = school.Headmasters.Any(x => x.Id == request.UserId);
             if (isUserHeadmasterInSchool)
                 return new() { Succeeded = false, Message = "User is already registered as a headmaster in this school" };
 
@@ -84,26 +84,26 @@ namespace GradeCenter.API.Services
             return new() { Succeeded = true };
         }
 
-        public async Task<IEnumerable<HeadmasterDto>> GetAll(string? schoolId)
+        public async Task<IEnumerable<HeadmasterDto>> GetAll(Guid? schoolId)
         {
             IQueryable<Headmaster> headmastersQuery = _context.Headmasters
                 .Include(x => x.User)
                 .Include(x => x.School);
 
             if (schoolId != null)
-                headmastersQuery = headmastersQuery.Where(x => x.SchoolId.ToString() == schoolId);
+                headmastersQuery = headmastersQuery.Where(x => x.SchoolId == schoolId);
 
             var headmasters = await headmastersQuery.ToListAsync();
 
             return headmasters.Adapt<List<HeadmasterDto>>();
         }
 
-        public async Task<HeadmasterDto?> GetById(int id)
+        public async Task<HeadmasterDto?> GetById(Guid id)
         {
             var headmaster = await _context.Headmasters
                 .Include(x => x.User)
                 .Include(x => x.School)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             return headmaster?.Adapt<HeadmasterDto>();
         }

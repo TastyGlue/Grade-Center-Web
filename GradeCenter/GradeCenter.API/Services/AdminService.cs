@@ -11,10 +11,10 @@
             _userManager = userManager;
         }
 
-        public async Task<Response<int>> AddAdmin(string userId)
+        public async Task<Response<Guid>> AddAdmin(Guid userId)
         {
             // Find user in database
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null)
                 return new() { Succeeded = false, Message = "Couldn't find user" };
 
@@ -77,7 +77,7 @@
             return admins.Adapt<List<AdminDto>>();
         }
 
-        public async Task<AdminDto?> GetById(int id)
+        public async Task<AdminDto?> GetById(Guid id)
         {
             var admin = await _context.Admins
                 .Include(x => x.User)

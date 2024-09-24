@@ -13,10 +13,10 @@ namespace GradeCenter.API.Services
             _context = context;
         }
 
-        public async Task<Response<int>> AddTeacher(AddTeacherRequest request)
+        public async Task<Response<Guid>> AddTeacher(AddTeacherRequest request)
         {
             // Find user in database
-            var user = await _userManager.FindByIdAsync(request.UserId);
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
             if (user == null)
                 return new() { Succeeded = false, Message = "Couldn't find user" };
 
@@ -26,7 +26,7 @@ namespace GradeCenter.API.Services
                 return new() { Succeeded = false, Message = "Couldn't find school" };
 
             // Check if the user is already a teacher at the school
-            bool isUserTeacherInSchool = school.Teachers.Any(x => x.UserId == request.UserId);
+            bool isUserTeacherInSchool = school.Teachers.Any(x => x.Id == request.UserId);
             if (isUserTeacherInSchool)
                 return new() { Succeeded = false, Message = "User is already registered as a teacher in this school" };
 
@@ -93,7 +93,7 @@ namespace GradeCenter.API.Services
             return new() { Succeeded = true };
         }
 
-        public async Task<IEnumerable<TeacherDto>> GetAll(string? schoolId)
+        public async Task<IEnumerable<TeacherDto>> GetAll(Guid? schoolId)
         {
             IQueryable<Teacher> teachersQuery = _context.Teachers
                 .Include(x => x.User)
@@ -102,14 +102,14 @@ namespace GradeCenter.API.Services
                 .Include(x => x.School);
 
             if (schoolId != null)
-                teachersQuery = teachersQuery.Where(x => x.SchoolId.ToString() == schoolId);
+                teachersQuery = teachersQuery.Where(x => x.SchoolId == schoolId);
 
             var teachers = await teachersQuery.ToListAsync();
 
             return teachers.Adapt<List<TeacherDto>>();
         }
 
-        public async Task<TeacherDto?> GetById(int id)
+        public async Task<TeacherDto?> GetById(Guid id)
         {
             var teacher = await _context.Teachers
                 .Include(x => x.User)

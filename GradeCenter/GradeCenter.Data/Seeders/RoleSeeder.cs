@@ -14,22 +14,22 @@ namespace GradeCenter.Data.Seeders
             foreach (var role in roles)
             {
                 //Check if data is already seeded
-                bool isExist = await context.Set<IdentityRole>().AnyAsync(x => x.NormalizedName == role.NormalizedName);
+                bool isExist = await context.Set<IdentityRole<Guid>>().AnyAsync(x => x.NormalizedName == role.NormalizedName);
 
                 //Seed data if not already seeded
                 if (!isExist)
-                    await context.Set<IdentityRole>().AddAsync(role);
+                    await context.Set<IdentityRole<Guid>>().AddAsync(role);
 
                 await context.SaveChangesAsync();
             }
         }
 
-        private HashSet<IdentityRole> CreateRolesList()
+        private HashSet<IdentityRole<Guid>> CreateRolesList()
         {
             // Get names of all roles
             var roleNames = Enum.GetNames(typeof(Roles)).ToList();
 
-            var roles = new HashSet<IdentityRole>();
+            var roles = new HashSet<IdentityRole<Guid>>();
 
             // Create the IdentityRole objects
             foreach (var name in roleNames)
