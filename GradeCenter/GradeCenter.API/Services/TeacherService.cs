@@ -1,6 +1,4 @@
-﻿using GradeCenter.Data.Models;
-
-namespace GradeCenter.API.Services
+﻿namespace GradeCenter.API.Services
 {
     public class TeacherService : ITeacherService
     {
@@ -42,6 +40,9 @@ namespace GradeCenter.API.Services
 
             try
             {
+                user.IsActive = true;
+                _context.Entry(user).State = EntityState.Modified;
+
                 await _context.Teachers.AddAsync(newTeacher);
                 await _context.SaveChangesAsync();
             }

@@ -47,6 +47,9 @@
 
             try
             {
+                user.IsActive = true;
+                _context.Entry(user).State = EntityState.Modified;
+
                 await _context.Students.AddAsync(newStudent);
                 await _context.SaveChangesAsync();
             }

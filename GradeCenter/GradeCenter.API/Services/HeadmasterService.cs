@@ -42,6 +42,9 @@ namespace GradeCenter.API.Services
 
             try
             {
+                user.IsActive = true;
+                _context.Entry(user).State = EntityState.Modified;
+
                 await _context.Headmasters.AddAsync(newHeadmaster);
                 await _context.SaveChangesAsync();
             }
