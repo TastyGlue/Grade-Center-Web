@@ -25,19 +25,10 @@ namespace GradeCenter.API.Services
             if (school == null)
                 return new() { Succeeded = false, Message = "Couldn't find school" };
 
-            // Check if the user is already a teacher at the school
-            bool isUserTeacherInSchool = school.Teachers.Any(x => x.Id == request.UserId);
-            if (isUserTeacherInSchool)
-                return new() { Succeeded = false, Message = "User is already registered as a teacher in this school" };
-
             // Add user to role
             var userRole = await _userManager.GetRolesAsync(user);
             if (userRole.Count > 0)
-            {
-                var removeResult = await _userManager.RemoveFromRolesAsync(user, userRole);
-                if (!removeResult.Succeeded)
-                    return new() { Succeeded = false, Message = "Couldn't remove user's prior roles" };
-            }
+                return new() { Succeeded = false, Message = "User already has a role" };
 
             var addResult = await _userManager.AddToRoleAsync(user, "TEACHER");
             if (!addResult.Succeeded)

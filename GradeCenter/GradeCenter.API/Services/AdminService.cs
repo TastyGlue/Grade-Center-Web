@@ -21,11 +21,7 @@
             // Add user to role
             var userRole = await _userManager.GetRolesAsync(user);
             if (userRole.Count > 0)
-            {
-                var removeResult = await _userManager.RemoveFromRolesAsync(user, userRole);
-                if (!removeResult.Succeeded)
-                    return new() { Succeeded = false, Message = "Couldn't remove user's prior roles" };
-            }
+                return new() { Succeeded = false, Message = "User already has a role" };
 
             var addResult = await _userManager.AddToRoleAsync(user, "ADMIN");
             if (!addResult.Succeeded)
