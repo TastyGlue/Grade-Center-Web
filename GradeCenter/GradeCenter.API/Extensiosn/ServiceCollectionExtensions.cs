@@ -11,11 +11,8 @@
                 options.SignIn.RequireConfirmedEmail = false;
                 options.Lockout.MaxFailedAccessAttempts = 0;
                 options.User.RequireUniqueEmail = true;
-                options.Password.RequiredLength = 6;
+                options.Password.RequiredLength = 8;
                 options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireUppercase = false;
             })
                 .AddEntityFrameworkStores<GradeCenterDbContext>() // Tying the identity to the database context
                 .AddUserManager<UserManager<User>>()

@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GradeCenter.Shared", "Grade
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GradeCenter.API", "GradeCenter.API\GradeCenter.API.csproj", "{EFBAAE7A-AB11-42D2-87EB-6625593DC63F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GradeCenter.Web", "GradeCenter.Web\GradeCenter.Web\GradeCenter.Web.csproj", "{5AAC1665-0E7C-4317-99E7-7F37934A16D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GradeCenter.Web", "GradeCenter.Web\GradeCenter.Web\GradeCenter.Web.csproj", "{5AAC1665-0E7C-4317-99E7-7F37934A16D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GradeCenter.Web.Client", "GradeCenter.Web\GradeCenter.Web.Client\GradeCenter.Web.Client.csproj", "{E6A34D8C-065E-4B41-BEF9-2C583C59FC66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GradeCenter.Web.Client", "GradeCenter.Web\GradeCenter.Web.Client\GradeCenter.Web.Client.csproj", "{E6A34D8C-065E-4B41-BEF9-2C583C59FC66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

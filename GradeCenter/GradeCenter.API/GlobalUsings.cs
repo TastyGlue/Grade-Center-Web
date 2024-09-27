@@ -22,3 +22,4 @@ global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.Extensions.Primitives;
 global using Mapster;
 global using Microsoft.EntityFrameworkCore.Query;
+global using Microsoft.AspNetCore.Authorization;

@@ -3,17 +3,20 @@
 <MudThemeProvider />
 <MudPopoverProvider />
 
-<MudLayout>
-    <MudAppBar Elevation="2">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => isDrawerOpen = !isDrawerOpen)" />
-    </MudAppBar>
-    <MudDrawer @bind-Open="isDrawerOpen" ClipMode="DrawerClipMode.Always" Elevation="4">
-        @*NavMenu*@
-    </MudDrawer>
-    <MudMainContent>
-        @Body
-    </MudMainContent>
-</MudLayout>
+@if (IsAuthenticated)
+{
+    <MudLayout>
+        <MudAppBar Elevation="2">
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => isDrawerOpen = !isDrawerOpen)" />
+        </MudAppBar>
+        <MudDrawer @bind-Open="isDrawerOpen" ClipMode="DrawerClipMode.Always" Elevation="4">
+            @*NavMenu*@
+        </MudDrawer>
+        <MudMainContent>
+            @Body
+        </MudMainContent>
+    </MudLayout>
+}
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.
@@ -23,4 +26,22 @@
 
 @code {
     bool isDrawerOpen = true;
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; } = default!;
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
+
+    public bool IsAuthenticated { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var User = (await authenticationStateTask).User;
+
+        if (!(User.Identity?.IsAuthenticated ?? false))
+            NavigationManager.NavigateTo("/login");
+
+        IsAuthenticated = true;
+    }
 }

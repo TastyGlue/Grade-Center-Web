@@ -59,7 +59,7 @@
                 };
 
                 //Get password hash
-                user.PasswordHash = _passwordHasher.HashPassword(user, "password");
+                user.PasswordHash = _passwordHasher.HashPassword(user, "Passw0rd");
                 await context.Set<User>().AddAsync(user);
 
                 //Get role by roleName

@@ -13,6 +13,17 @@ namespace GradeCenter.Web
 
             builder.Services.AddMudServices();
 
+            builder.Services.AddAuthorization();
+            builder.Services.AddCascadingAuthenticationState();
+            builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+
+            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
+            builder.Services.AddHttpClient(Constants.API_CLIENT_NAME, client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7181/");
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

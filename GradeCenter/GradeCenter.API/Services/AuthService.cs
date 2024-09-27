@@ -60,7 +60,11 @@
 
             await _context.SaveChangesAsync();
 
-            return new TokensResponse(tokens.AccessToken, tokens.RefreshToken);
+            return new()
+            {
+                AccessToken = tokens.AccessToken,
+                RefreshToken = tokens.RefreshToken
+            };
         }
 
         private async Task<TokensResponse> GenerateTokens(User user)
@@ -76,7 +80,11 @@
 
             await SaveRefreshTokenToDb(user.Id, refreshToken);
 
-            return new TokensResponse(accessToken, refreshToken);
+            return new()
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
+            };
         }
 
         private async Task SaveRefreshTokenToDb(Guid userId, string refreshToken)

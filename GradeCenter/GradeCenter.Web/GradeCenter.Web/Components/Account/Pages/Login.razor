@@ -1,0 +1,33 @@
+﻿@page "/login"
+@inherits ExtendedComponentBase<Login>
+
+<PageTitle>Login</PageTitle>
+
+<h1>Login</h1>
+
+<MudForm @ref="FormRef">
+    <MudIcon Icon="@Icons.Material.Sharp.Email" Color="Color.Primary" />
+    <MudTextField @bind-Value="@Email"
+                  Label="Email"
+                  InputType="InputType.Email"
+                  Required="true" RequiredError="Email is required"
+                  Validation="@(new Func<string, IEnumerable<string>>(EmailValidity))"/>
+
+    <MudIcon Icon="@Icons.Material.Sharp.Password" Color="Color.Primary" />
+    <MudTextField @bind-Value="@Password"
+                  Label="Password"
+                  InputType="InputType.Password"
+                  Required="true" RequiredError="Password is required"
+                  Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" />
+
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false" OnClick="@((e) => LoginClickHandler())">Login</MudButton>
+</MudForm>
+
+@if (!string.IsNullOrWhiteSpace(ErrorMessage))
+{
+    
+}
+else
+{
+    <span>@Email</span>
+}
