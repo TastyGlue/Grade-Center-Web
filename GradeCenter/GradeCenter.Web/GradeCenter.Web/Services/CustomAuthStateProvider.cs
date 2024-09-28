@@ -44,7 +44,7 @@
                     else
                     {
                         // Redirect to login if refresh token is also expired
-                        _navigationManager.NavigateTo("/login");
+                        _navigationManager.NavigateTo("/account/login");
                     }
                 }
             }
@@ -92,6 +92,9 @@
 
         private async Task<bool> TryRefreshToken(string accessToken, string? refreshToken)
         {
+            if (refreshToken is null)
+                return false;
+
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(accessToken);
 
@@ -103,15 +106,18 @@
             if (expiryDate.AddDays(_jwtSettingsMonitor.CurrentValue.RefreshTokenExpirationInDays) >= DateTime.UtcNow)
             {
                 // Call the API to refresh the token
-                var httpClient = _httpClientFactory.CreateClient("GradeCenterApi");
-                var response = await httpClient.PostAsJsonAsync("api/auth/refresh", new { Token = accessToken, RefreshToken = refreshToken });
+                var httpClient = _httpClientFactory.CreateClient(Constants.API_CLIENT_NAME);
+                var response = await httpClient.GetAsync($"api/auth/refresh?refreshToken={Uri.EscapeDataString(refreshToken)}");
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var tokens = await response.Content.ReadFromJsonAsync<TokensResponse>();
+                    var tokens = await response.Content.ReadFromJsonAsync<TokensResponse>(new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+                    if (tokens is null || tokens.AccessToken is null)
+                        return false;
 
                     // Store the new tokens in LocalStorage
-                    await _localStorage.SetAsync(_tokenKey, tokens!.AccessToken);
+                    await _localStorage.SetAsync(_tokenKey, tokens.AccessToken);
                     await _localStorage.SetAsync(_refreshTokenKey, tokens.RefreshToken);
 
                     return true; // Successfully refreshed token

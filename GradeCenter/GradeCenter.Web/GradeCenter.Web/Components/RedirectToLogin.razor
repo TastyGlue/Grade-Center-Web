@@ -3,6 +3,10 @@
 @code {
     protected override void OnInitialized()
     {
-        NavigationManager.NavigateTo("/login");
+        var currentUri = NavigationManager.Uri;
+        bool IsOnAnonymousPage = currentUri.EndsWith("/account") || currentUri.Contains("/account/");
+
+        if (!IsOnAnonymousPage)
+            NavigationManager.NavigateTo("/account/login");
     }
 }

@@ -22,16 +22,21 @@
 
             // Check if user exists
             if (user == null)
-                return NotFound("Couldn't find user with these credentials");
+                return NotFound("Incorrect email or password");
+
+            // Check if user has any roles
+            var roles = await _userManager.GetRolesAsync(user);
+            if (roles.Count == 0)
+                return Unauthorized("Your register request has not been reviewed yet");
 
             // Check if user is active
             if (!user.IsActive)
-                return NotFound("Your account is deactivated. If you think this is a mistake - contact your school administrator");
+                return Forbid("Your account is deactivated");
 
             // Check if password is valid
             bool isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password);
             if (!isPasswordValid)
-                return NotFound("Couldn't find user with these credentials");
+                return NotFound("Incorrect email or password");
 
             try
             {

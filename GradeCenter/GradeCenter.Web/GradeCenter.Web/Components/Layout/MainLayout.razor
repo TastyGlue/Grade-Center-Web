@@ -9,7 +9,7 @@
         <MudAppBar Elevation="2">
             <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => isDrawerOpen = !isDrawerOpen)" />
         </MudAppBar>
-        <MudDrawer @bind-Open="isDrawerOpen" ClipMode="DrawerClipMode.Always" Elevation="4">
+        <MudDrawer @bind-Open="isDrawerOpen" ClipMode="DrawerClipMode.Docked" Elevation="4">
             @*NavMenu*@
         </MudDrawer>
         <MudMainContent>
@@ -40,7 +40,13 @@
         var User = (await authenticationStateTask).User;
 
         if (!(User.Identity?.IsAuthenticated ?? false))
-            NavigationManager.NavigateTo("/login");
+        {
+            var currentUri = NavigationManager.Uri;
+            bool IsOnAnonymousPage = currentUri.EndsWith("/account") || currentUri.Contains("/account/");
+
+            if (!IsOnAnonymousPage)
+                NavigationManager.NavigateTo("/account/login");
+        }
 
         IsAuthenticated = true;
     }

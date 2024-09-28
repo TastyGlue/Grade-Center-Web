@@ -60,11 +60,7 @@
 
             await _context.SaveChangesAsync();
 
-            return new()
-            {
-                AccessToken = tokens.AccessToken,
-                RefreshToken = tokens.RefreshToken
-            };
+            return tokens;
         }
 
         private async Task<TokensResponse> GenerateTokens(User user)

@@ -1,0 +1,61 @@
+﻿@page "/account/register"
+@inherits ExtendedComponentBase<Register>
+
+<PageTitle>Register</PageTitle>
+
+<h1>Register</h1>
+
+@if (!IsRegisterSuccess)
+{
+    <MudForm @ref="FormRef">
+        <MudIcon Icon="@Icons.Material.Sharp.Person" Color="Color.Primary" />
+        <MudTextField @bind-Value="@FullName"
+                      Label="Full Name"
+                      Validation="@(new Func<string, IEnumerable<string>>(FullNameValidity))" />
+
+        <MudIcon Icon="@Icons.Material.Sharp.CalendarMonth" Color="Color.Primary" />
+        <MudDatePicker @bind-Date="DateOfBirth"
+                       Label="Date of Birth"
+                       DateFormat="dd/MM/yyyy"
+                       Required="true" RequiredError="Date of Birth is required"
+                       PickerVariant="PickerVariant.Dialog"
+                       AutoClose="true" />
+
+        <MudIcon Icon="@Icons.Material.Sharp.Email" Color="Color.Primary" />
+        <MudTextField @bind-Value="@Email"
+                      Label="Email"
+                      InputType="InputType.Email"
+                      Validation="@(new Func<string, IEnumerable<string>>(EmailValidity))" />
+
+        <MudIcon Icon="@Icons.Material.Sharp.Password" Color="Color.Primary" />
+        <MudTextField @bind-Value="@Password"
+                      Label="Password"
+                      InputType="InputType.Password"
+                      Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" />
+
+        <MudIcon Icon="@Icons.Material.Sharp.Password" Color="Color.Primary" />
+        <MudTextField T="string"
+                      Label="Repeat Password"
+                      InputType="InputType.Password"
+                      Validation="@(new Func<string, string>(PasswordMatch))" />
+
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false" OnClick="@((e) => RegisterClickHandler())">Register</MudButton>
+        <MudLink Href="/account/login">Already have an account? Click here to log in</MudLink>
+        <MudAlert Severity="Severity.Info">
+            Once you fill out the registration form, your request will be reviewed by an administrator.
+            You will receive an email when the review is complete.
+        </MudAlert>
+    </MudForm>
+}
+else
+{
+    <MudAlert Severity="Severity.Success">
+        You have registered successfully. 
+        You will be able to log into the system when an administrator has reviewed your request.</MudAlert>
+}
+
+
+@if (!string.IsNullOrWhiteSpace(ErrorMessage))
+{
+    <MudAlert Severity="Severity.Error">@ErrorMessage</MudAlert>
+}

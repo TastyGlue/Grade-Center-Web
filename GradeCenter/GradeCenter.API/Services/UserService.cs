@@ -24,7 +24,7 @@
             {
                 UserName = user.FullName.Replace(" ", "."),
                 NormalizedUserName = user.FullName.Replace(" ", ".").ToUpper(),
-                DateOfBirth = user.DateOfBirth,
+                DateOfBirth = DateTime.SpecifyKind(user.DateOfBirth, DateTimeKind.Utc),
                 FullName = user.FullName,
                 Email = user.Email,
                 NormalizedEmail = user.Email.ToUpper(),
