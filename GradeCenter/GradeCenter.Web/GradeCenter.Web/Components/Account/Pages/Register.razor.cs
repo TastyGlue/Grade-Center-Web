@@ -90,6 +90,13 @@
             return null;
         }
 
+        private string DateTimeValidity(DateTime? arg)
+        {
+            if (arg is null)
+                return "Date of Birth is required";
+            return null;
+        }
+
         #region Regex
         [GeneratedRegex(@"[A-Z]")]
         private static partial Regex CapitalLetter();
