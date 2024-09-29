@@ -3,10 +3,15 @@
     public partial class Login : ExtendedComponentBase<Login>
     {
         [Inject] public ProtectedLocalStorage _localStorage { get; set; } = default!;
+
         public MudForm FormRef { get; set; } = default!;
         public string Email { get; set; } = default!;
         public string Password { get; set; } = default!;
         public string? ErrorMessage { get; set; } = null;
+
+        bool IsPasswordVisible = false;
+        InputType PasswordInputType = InputType.Password;
+        string PasswordIcon = Icons.Material.Filled.VisibilityOff;
 
         public async Task ValidSubmit()
         {
@@ -45,6 +50,22 @@
 
             if (FormRef.IsValid)
                 await ValidSubmit();
+        }
+
+        private void PasswordVisibilityHandler()
+        {
+            if (IsPasswordVisible)
+            {
+                PasswordIcon = Icons.Material.Filled.VisibilityOff;
+                PasswordInputType = InputType.Password;
+            }
+            else
+            {
+                PasswordIcon = Icons.Material.Filled.Visibility;
+                PasswordInputType = InputType.Text;
+            }
+
+            IsPasswordVisible = !IsPasswordVisible;
         }
 
         private IEnumerable<string> PasswordStrength(string pw)

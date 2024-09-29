@@ -10,6 +10,10 @@
         public string? ErrorMessage { get; set; } = null;
         public bool IsRegisterSuccess { get; set; } = false;
 
+        bool IsPasswordVisible = false;
+        InputType PasswordInputType = InputType.Password;
+        string PasswordIcon = Icons.Material.Filled.VisibilityOff;
+
         public async Task ValidSubmit()
         {
             var newUser = new AddUserRequest()
@@ -39,6 +43,22 @@
 
             if (FormRef.IsValid)
                 await ValidSubmit();
+        }
+
+        private void PasswordVisibilityHandler()
+        {
+            if (IsPasswordVisible)
+            {
+                PasswordIcon = Icons.Material.Filled.VisibilityOff;
+                PasswordInputType = InputType.Password;
+            }
+            else
+            {
+                PasswordIcon = Icons.Material.Filled.Visibility;
+                PasswordInputType = InputType.Text;
+            }
+
+            IsPasswordVisible = !IsPasswordVisible;
         }
 
         private IEnumerable<string> PasswordStrength(string pw)

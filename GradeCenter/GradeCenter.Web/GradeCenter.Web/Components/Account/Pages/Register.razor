@@ -8,7 +8,7 @@
 
     @if (!IsRegisterSuccess)
     {
-        <MudForm @ref="FormRef" Class="gap-4">
+        <MudForm @ref="FormRef" Class="gap-4" Style="width:100%;">
             <div class="anonymous-form-field">
                 <MudIcon Icon="@Icons.Material.Sharp.Person" Color="Color.Primary" />
                 <MudTextField @bind-Value="@FullName"
@@ -23,7 +23,7 @@
                                DateFormat="dd/MM/yyyy"
                                PickerVariant="PickerVariant.Dialog"
                                AutoClose="true"
-                               Validation="@(new Func<DateTime?, string>(DateTimeValidity))"/>
+                               Validation="@(new Func<DateTime?, string>(DateTimeValidity))" />
             </div>
 
             <div class="anonymous-form-field">
@@ -38,25 +38,28 @@
                 <MudIcon Icon="@Icons.Material.Sharp.Password" Color="Color.Primary" />
                 <MudTextField @bind-Value="@Password"
                               Label="Password"
-                              InputType="InputType.Password"
+                              InputType="PasswordInputType"
+                              Adornment="Adornment.End" AdornmentAriaLabel="Password Visibility" AdornmentIcon="@PasswordIcon" AdornmentColor="Color.Primary" OnAdornmentClick="PasswordVisibilityHandler"
                               Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" />
             </div>
-            
+
             <div class="anonymous-form-field">
                 <MudIcon Icon="@Icons.Material.Sharp.Password" Color="Color.Primary" />
                 <MudTextField T="string"
                               Label="Repeat Password"
-                              InputType="InputType.Password"
+                              InputType="PasswordInputType"
+                              Adornment="Adornment.End" AdornmentAriaLabel="Password Visibility" AdornmentIcon="@PasswordIcon" AdornmentColor="Color.Primary" OnAdornmentClick="PasswordVisibilityHandler"
                               Validation="@(new Func<string, string>(PasswordMatch))" />
             </div>
-            
+
             <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false" OnClick="@((e) => RegisterClickHandler())">Register</MudButton>
             <MudLink Href="/account/login">Already have an account? Click here to log in</MudLink>
-            <MudAlert Severity="Severity.Info">
-                Once you fill out the registration form, your request will be reviewed by an administrator.
-                You will receive an email when the review is complete.
-            </MudAlert>
         </MudForm>
+
+        <MudAlert Severity="Severity.Info">
+            Once you fill out the registration form, your request will be reviewed by an administrator.
+            You will receive an email when the review is complete.
+        </MudAlert>
     }
     else
     {
