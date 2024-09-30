@@ -13,7 +13,7 @@ namespace GradeCenter.API.Services
             _context = context;
         }
 
-        public async Task<Response<Guid>> AddHeadmaster(AddHeadmasterRequest request)
+        public async Task<CustomResult<Guid>> AddHeadmaster(AddHeadmasterRequest request)
         {
             // Find user in database
             var user = await _userManager.FindByIdAsync(request.UserId.ToString());
@@ -56,7 +56,7 @@ namespace GradeCenter.API.Services
             return new() { Succeeded = true, ReturnValue = newHeadmaster.Id };
         }
 
-        public async Task<Response<string>> Edit(HeadmasterDto headmasterDto)
+        public async Task<CustomResult<string>> Edit(HeadmasterDto headmasterDto)
         {
             var headmaster = await _context.Headmasters.FirstOrDefaultAsync(x => x.Id == headmasterDto.Id);
             if (headmaster == null)

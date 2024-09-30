@@ -7,6 +7,7 @@
         }
 
         //Creating database tables
+        public DbSet<PendingUser> PendingUsers { get; set; }
         public DbSet<School> Schools { get; set; }
         public DbSet<Class> Classes { get; set; }
         public DbSet<Subject> Subjects { get; set; }

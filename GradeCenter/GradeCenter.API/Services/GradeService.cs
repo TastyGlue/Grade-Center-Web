@@ -13,7 +13,7 @@
             _tokenService = tokenService;
         }
 
-        public async Task<Response<Guid>> Add(AddGradeRequest request)
+        public async Task<CustomResult<Guid>> Add(AddGradeRequest request)
         {
             var student = await _context.Students.FirstOrDefaultAsync(x => x.Id == request.StudentId);
             if (student == null)
@@ -49,7 +49,7 @@
             }
         }
 
-        public async Task<Response<string>> Delete(Guid gradeId)
+        public async Task<CustomResult<string>> Delete(Guid gradeId)
         {
             var grade = await _context.Grades.FirstOrDefaultAsync(x => x.Id == gradeId);
             if (grade == null)
@@ -68,7 +68,7 @@
             }
         }
 
-        public async Task<Response<string>> Edit(GradeDto gradeDto)
+        public async Task<CustomResult<string>> Edit(GradeDto gradeDto)
         {
             var grade = await _context.Grades.FirstOrDefaultAsync(x => x.Id == gradeDto.Id);
 

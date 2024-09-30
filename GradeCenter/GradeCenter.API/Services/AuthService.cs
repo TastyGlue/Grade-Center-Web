@@ -66,12 +66,12 @@
         private async Task<TokensResponse> GenerateTokens(User user)
         {
             // Get user role
-            var role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
-            if (role == null)
+            var roles = await _userManager.GetRolesAsync(user);
+            if (roles.Count == 0)
                 throw new Exception("Cannot generate tokens for a user without a role");
 
             // Generate tokens
-            string accessToken = await _tokenService.GenerateAccessToken(user, role);
+            string accessToken = _tokenService.GenerateAccessToken(user, roles);
             string refreshToken = _tokenService.GenerateRefreshToken();
 
             await SaveRefreshTokenToDb(user.Id, refreshToken);

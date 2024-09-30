@@ -17,7 +17,7 @@
             tokenExpirationInMinutes = int.Parse(_config["JwtSettings:TokenExpirationInMinutes"]!);
         }
 
-        public async Task<string> GenerateAccessToken(User user, string roleName)
+        public string GenerateAccessToken(User user, IList<string> roles)
         {
             // Make a list of claims included in the token
             var claims = new List<Claim>()
@@ -27,13 +27,8 @@
                 new(ClaimTypes.Email, user.Email!)
             };
 
-            // Check if role exists
-            var role = await _roleManager.FindByNameAsync(roleName.ToUpper());
-            if (role == null)
-                throw new Exception("Couldn't find role");
-
-            // Add role to claims
-            claims.Add(new(ClaimTypes.Role, roleName.ToLower()));
+            // Add roles to claims
+            claims.AddRange(roles.Select(x => new Claim(ClaimTypes.Role, x)));
 
             // Set the key and algorithm for token signing
             var signingCredentials = new SigningCredentials(

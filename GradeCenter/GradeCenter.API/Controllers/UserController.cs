@@ -79,5 +79,45 @@
 
             return (result.Succeeded) ? Ok() : BadRequest(result.Message);
         }
+
+        [HttpPost("pending")]
+        public async Task<IActionResult> AddPendingUser(AddUserRequest user)
+        {
+            var result = await _userService.AddPendingUser(user);
+
+            return (result.Succeeded) ? Ok() : BadRequest(result.Message);
+        }
+
+        [HttpPut("pending")]
+        public async Task<IActionResult> EditPendingUser(PendingUserDto dto)
+        {
+            var result = await _userService.EditPendingUser(dto);
+
+            return (result.Succeeded) ? Ok() : BadRequest(result.Message);
+        }
+
+        [HttpDelete("pending/{id}")]
+        public async Task<IActionResult> DeletePendingUser(Guid id)
+        {
+            var result = await _userService.DeletePendingUser(id);
+
+            return (result.Succeeded) ? Ok() : BadRequest(result.Message);
+        }
+
+        [HttpGet("pending")]
+        public async Task<ActionResult<IEnumerable<PendingUserDto>>> GetAllPendingUsers()
+        {
+            var result = await _userService.GetAllPendingUsers();
+
+            return Ok(result);
+        }
+
+        [HttpGet("pending/{id}")]
+        public async Task<ActionResult<PendingUserDto?>> GetPendingUser(Guid id)
+        {
+            var result = await _userService.GetPendingUser(id);
+
+            return Ok(result);
+        }
     }
 }

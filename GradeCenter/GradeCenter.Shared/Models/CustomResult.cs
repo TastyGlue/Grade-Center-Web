@@ -1,6 +1,6 @@
 ﻿namespace GradeCenter.Shared.Models
 {
-    public class Response<T>
+    public class CustomResult<T>
     {
         public bool Succeeded { get; set; }
         public string? Message { get; set; }

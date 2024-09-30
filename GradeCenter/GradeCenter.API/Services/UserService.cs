@@ -1,4 +1,6 @@
-﻿namespace GradeCenter.API.Services
+﻿using Humanizer;
+
+namespace GradeCenter.API.Services
 {
     public class UserService : IUserService
     {
@@ -13,7 +15,7 @@
             _tokenService = tokenService;
         }
 
-        public async Task<Response<Guid>> AddUser(AddUserRequest user)
+        public async Task<CustomResult<Guid>> AddUser(AddUserRequest user)
         {
             // Check if someone is already registered with this email
             var isEmailExist = await _userManager.FindByEmailAsync(user.Email.ToUpper()) != null;
@@ -64,7 +66,7 @@
             return result.Succeeded;
         }
 
-        public async Task<Response<string>> Edit(UserDto userDto, StringValues authHeader)
+        public async Task<CustomResult<string>> Edit(UserDto userDto, StringValues authHeader)
         {
             var token = _tokenService.GetTokenContentFromAuthHeader(authHeader);
             if (token == null)
@@ -160,7 +162,7 @@
             return users.Adapt<List<UserDto>>();
         }
 
-        public async Task<Response<bool>> RemoveFromRole(Guid userId)
+        public async Task<CustomResult<bool>> RemoveFromRole(Guid userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null)
@@ -174,6 +176,94 @@
                 await _userManager.RemoveFromRoleAsync(user, role.ToUpper());
 
             return new() { Succeeded = true };
+        }
+
+        public async Task<CustomResult<string>> AddPendingUser(AddUserRequest user)
+        {
+            if (user.Role is null)
+                return new() { Succeeded = false, Message = "Role is required" };
+
+            try
+            {
+                var role = (Roles) Enum.Parse(typeof(Roles), user.Role, true);
+
+                var pendingUser = new PendingUser()
+                {
+                    Email = user.Email,
+                    FullName = user.FullName,
+                    DateOfBirth = user.DateOfBirth,
+                    Password = user.Password,
+                    Role = role,
+                    CreatedOn = DateTime.UtcNow
+                };
+
+                await _context.PendingUsers.AddAsync(pendingUser);
+                await _context.SaveChangesAsync();
+
+                return new() { Succeeded = true };
+            }
+            catch (Exception)
+            {
+                return new() { Succeeded = false, Message = "Request failed due to a server error" };
+            }
+        }
+
+        public async Task<CustomResult<string>> EditPendingUser(PendingUserDto dto)
+        {
+            var pendingUser = await _context.PendingUsers.FirstOrDefaultAsync(x => x.Id == dto.Id);
+            if (pendingUser is null)
+                return new() { Succeeded = false, Message = "Couldn't find pending user" };
+
+            pendingUser.Email = dto.Email;
+            pendingUser.FullName = dto.FullName;
+            pendingUser.DateOfBirth = dto.DateOfBirth;
+            pendingUser.Password = dto.Password;
+            pendingUser.Role = dto.Role;
+
+            try
+            {
+                _context.Entry(pendingUser).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+                return new() { Succeeded = true };
+            }
+            catch (Exception ex)
+            {
+                return new() { Succeeded = false, Message = ex.ToString() };
+            }
+        }
+
+        public async Task<CustomResult<string>> DeletePendingUser(Guid id)
+        {
+            var pendingUser = await _context.PendingUsers.FirstOrDefaultAsync(x => x.Id == id);
+            if (pendingUser is null)
+                return new() { Succeeded = false, Message = "Couldn't find pending user" };
+
+            try
+            {
+                _context.PendingUsers.Remove(pendingUser);
+                await _context.SaveChangesAsync();
+
+                return new() { Succeeded = true };
+            }
+            catch (Exception ex)
+            {
+                return new() { Succeeded = false, Message = ex.ToString() };
+            }
+        }
+
+        public async Task<IEnumerable<PendingUserDto>> GetAllPendingUsers()
+        {
+            var pendingUsers = await _context.PendingUsers.ToListAsync();
+
+            return pendingUsers.Adapt<List<PendingUserDto>>();
+        }
+
+        public async Task<PendingUserDto?> GetPendingUser(Guid id)
+        {
+            var pendingUser = await _context.PendingUsers.FirstOrDefaultAsync(x => x.Id == id);
+
+            return pendingUser?.Adapt<PendingUserDto>();
         }
     }
 }

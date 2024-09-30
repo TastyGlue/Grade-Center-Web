@@ -11,7 +11,7 @@
             _userManager = userManager;
         }
 
-        public async Task<Response<Guid>> AddAdmin(Guid userId)
+        public async Task<CustomResult<Guid>> AddAdmin(Guid userId)
         {
             // Find user in database
             var user = await _userManager.FindByIdAsync(userId.ToString());
@@ -48,7 +48,7 @@
             return new() { Succeeded = true, ReturnValue = newAdmin.Id };
         }
 
-        public async Task<Response<string>> Edit(AdminDto adminDto)
+        public async Task<CustomResult<string>> Edit(AdminDto adminDto)
         {
             var admin = await _context.Admins.FirstOrDefaultAsync(x => x.Id == adminDto.Id);
             if (admin == null)

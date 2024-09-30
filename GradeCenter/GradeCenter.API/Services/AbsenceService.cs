@@ -12,7 +12,7 @@
             _userManager = userManager;
             _tokenService = tokenService;
         }
-        public async Task<Response<Guid>> Add(AddAbsenceRequest request)
+        public async Task<CustomResult<Guid>> Add(AddAbsenceRequest request)
         {
             var student = await _context.Students.FirstOrDefaultAsync(x => x.Id == request.StudentId);
             if (student == null)
@@ -53,7 +53,7 @@
             }
         }
 
-        public async Task<Response<string>> Delete(Guid absenceId)
+        public async Task<CustomResult<string>> Delete(Guid absenceId)
         {
             var absence = await _context.Absences.FirstOrDefaultAsync(x => x.Id == absenceId);
             if (absence == null)
@@ -72,7 +72,7 @@
             }
         }
 
-        public async Task<Response<string>> Edit(AbsenceDto absenceDto)
+        public async Task<CustomResult<string>> Edit(AbsenceDto absenceDto)
         {
             var absence = await _context.Absences.FirstOrDefaultAsync(x => x.Id == absenceDto.Id);
 

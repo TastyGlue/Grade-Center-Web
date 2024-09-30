@@ -10,7 +10,7 @@
             _userManager = userManager;
             _context = context;
         }
-        public async Task<Response<Guid>> AddStudent(AddStudentRequest request)
+        public async Task<CustomResult<Guid>> AddStudent(AddStudentRequest request)
         {
             // Find user in database
             var user = await _userManager.FindByIdAsync(request.UserId.ToString());
@@ -61,7 +61,7 @@
             return new() { Succeeded = true, ReturnValue = newStudent.Id };
         }
 
-        public async Task<Response<string>> Edit(StudentDto studentDto)
+        public async Task<CustomResult<string>> Edit(StudentDto studentDto)
         {
             var student = await _context.Students
                 .Include(x => x.Class)

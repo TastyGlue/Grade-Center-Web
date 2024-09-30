@@ -11,7 +11,7 @@ namespace GradeCenter.API.Services
             _context = context;
         }
 
-        public async Task<Response<Guid>> Add(AddSubjectRequest request)
+        public async Task<CustomResult<Guid>> Add(AddSubjectRequest request)
         {
             var school = await _context.Schools.FirstOrDefaultAsync(x => x.Id == request.SchoolId);
             if (school == null)
@@ -37,7 +37,7 @@ namespace GradeCenter.API.Services
             }
         }
 
-        public async Task<Response<string>> Edit(SubjectDto subjectDto)
+        public async Task<CustomResult<string>> Edit(SubjectDto subjectDto)
         {
             var subject = await _context.Subjects.FirstOrDefaultAsync(x => x.Id == subjectDto.Id);
 

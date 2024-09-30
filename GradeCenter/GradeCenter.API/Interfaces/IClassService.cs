@@ -2,10 +2,10 @@
 {
     public interface IClassService
     {
-        Task<Response<Guid>> Add(AddClassRequest request);
-        Task<Response<string>> Edit(ClassDto classDto);
+        Task<CustomResult<Guid>> Add(AddClassRequest request);
+        Task<CustomResult<string>> Edit(ClassDto classDto);
         Task<IEnumerable<ClassDto>> GetAll(Guid? schoolId);
         Task<ClassDto?> GetById(Guid classId);
-        Task<Response<string>> Delete(Guid classId);
+        Task<CustomResult<string>> Delete(Guid classId);
     }
 }

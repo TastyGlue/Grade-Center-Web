@@ -11,7 +11,7 @@
             _context = context;
         }
 
-        public async Task<Response<Guid>> AddTeacher(AddTeacherRequest request)
+        public async Task<CustomResult<Guid>> AddTeacher(AddTeacherRequest request)
         {
             // Find user in database
             var user = await _userManager.FindByIdAsync(request.UserId.ToString());
@@ -24,10 +24,6 @@
                 return new() { Succeeded = false, Message = "Couldn't find school" };
 
             // Add user to role
-            var userRole = await _userManager.GetRolesAsync(user);
-            if (userRole.Count > 0)
-                return new() { Succeeded = false, Message = "User already has a role" };
-
             var addResult = await _userManager.AddToRoleAsync(user, "TEACHER");
             if (!addResult.Succeeded)
                 return new() { Succeeded = false, Message = "Couldn't add user to \"Teacher\"" };
@@ -54,7 +50,7 @@
             return new() { Succeeded = true, ReturnValue = newTeacher.Id };
         }
 
-        public async Task<Response<string>> Edit(TeacherDto teacherDto)
+        public async Task<CustomResult<string>> Edit(TeacherDto teacherDto)
         {
             var teacher = await _context.Teachers
                 .Include(x => x.TeacherSubjects)
@@ -113,7 +109,7 @@
             return teacher?.Adapt<TeacherDto>();
         }
 
-        private async Task<Response<string>> EditTeacherSubjects(Teacher teacher, List<SubjectDto> newSubjects)
+        private async Task<CustomResult<string>> EditTeacherSubjects(Teacher teacher, List<SubjectDto> newSubjects)
         {
             try
             {

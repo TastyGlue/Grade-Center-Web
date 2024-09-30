@@ -21,5 +21,20 @@
 
             return client!;
         }
+
+        public Dictionary<string, string> EnumToDict<TEnum>() where TEnum : Enum
+        {
+            var dict = new Dictionary<string, string>();
+
+            TextInfo info = CultureInfo.CurrentCulture.TextInfo;
+
+            foreach (var item in Enum.GetValues(typeof(TEnum)))
+            {
+                string itemString = item.ToString() ?? "";
+                dict.Add(itemString, info.ToTitleCase(itemString.ToLower()));
+            }
+
+            return dict;
+        }
     }
 }

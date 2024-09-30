@@ -2,7 +2,7 @@
 {
     public interface ITokenService
     {
-        Task<string> GenerateAccessToken(User user, string roleName);
+        string GenerateAccessToken(User user, IList<string> roles);
         string GenerateRefreshToken();
         TokenContent? GetTokenContentFromAuthHeader(StringValues authHeader);
     }

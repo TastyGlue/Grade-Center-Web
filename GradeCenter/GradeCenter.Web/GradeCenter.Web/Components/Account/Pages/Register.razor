@@ -28,6 +28,7 @@
                                DateFormat="dd/MM/yyyy"
                                PickerVariant="PickerVariant.Dialog"
                                AutoClose="true"
+                               AdornmentColor="Color.Primary"
                                Validation="@(new Func<DateTime?, string>(DateTimeValidity))" />
             </div>
 
@@ -57,6 +58,22 @@
                               Validation="@(new Func<string, string>(PasswordMatch))" />
             </div>
 
+            <div class="anonymous-form-field">
+                <MudIcon Icon="@Icons.Material.Sharp.Badge" Color="Color.Primary" />
+                <MudSelect @bind-Value="Role"
+                           Label="Register as"
+                           AdornmentColor="Color.Primary">
+                    @{
+                        var roles = EnumToDict<Roles>();
+
+                        foreach (var role in roles)
+                        {
+                            <MudSelectItem Value="@role.Key">@role.Value</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+            </div>
+
             <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false" OnClick="@((e) => RegisterClickHandler())">Register</MudButton>
             <MudLink Href="/account/login">Already have an account? Click here to log in</MudLink>
         </MudForm>
@@ -72,7 +89,7 @@
             You have registered successfully.
             You will be able to log into the system when an administrator has reviewed your request.
         </MudAlert>
-        <MudLink Href="/login">Click here to go back to login page</MudLink>
+        <MudLink Href="/acount/login">Click here to go back to login page</MudLink>
     }
 
 

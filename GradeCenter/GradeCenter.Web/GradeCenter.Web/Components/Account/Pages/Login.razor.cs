@@ -11,7 +11,7 @@
 
         bool IsPasswordVisible = false;
         InputType PasswordInputType = InputType.Password;
-        string PasswordIcon = Icons.Material.Filled.VisibilityOff;
+        string PasswordIcon = Icons.Material.Sharp.VisibilityOff;
 
         public async Task ValidSubmit()
         {
@@ -31,6 +31,7 @@
                     return;
                 }
 
+                // TODO: Add logic for a token with more than one role
                 await _localStorage.SetAsync("accessToken", tokens.AccessToken);
                 await _localStorage.SetAsync("refreshToken", tokens.RefreshToken);
 

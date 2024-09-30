@@ -9,3 +9,4 @@ global using System.ComponentModel.DataAnnotations.Schema;
 global using GradeCenter.Data.Models;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore;
+global using GradeCenter.Shared.Models;

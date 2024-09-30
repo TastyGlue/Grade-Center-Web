@@ -10,7 +10,7 @@
             _userManager = userManager;
             _context = context;
         }
-        public async Task<Response<Guid>> AddParent(AddParentRequest request)
+        public async Task<CustomResult<Guid>> AddParent(AddParentRequest request)
         {
             // Find user in database
             var user = await _userManager.FindByIdAsync(request.UserId.ToString());
@@ -18,10 +18,6 @@
                 return new() { Succeeded = false, Message = "Couldn't find user" };
 
             // Add user to role
-            var userRole = await _userManager.GetRolesAsync(user);
-            if (userRole.Count > 0)
-                return new() { Succeeded = false, Message = "User already has a role" };
-
             var addResult = await _userManager.AddToRoleAsync(user, "PARENT");
             if (!addResult.Succeeded)
                 return new() { Succeeded = false, Message = "Couldn't add user to \"Parent\"" };
@@ -56,7 +52,7 @@
             return new() { Succeeded = true, ReturnValue = newParent.Id };
         }
 
-        public async Task<Response<string>> Edit(ParentDto parentDto)
+        public async Task<CustomResult<string>> Edit(ParentDto parentDto)
         {
             var parent = await _context.Parents
                 .Include(x => x.StudentParents)
@@ -107,7 +103,7 @@
             return parent?.Adapt<ParentDto>();
         }
 
-        private async Task<Response<string>> EditParentStudents(Parent parent, List<StudentDto> newStudents)
+        private async Task<CustomResult<string>> EditParentStudents(Parent parent, List<StudentDto> newStudents)
         {
             try
             {

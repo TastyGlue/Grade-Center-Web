@@ -7,12 +7,13 @@
         public string FullName { get; set; } = default!;
         public string Password { get; set; } = default!;
         public DateTime? DateOfBirth { get; set; }
+        public string Role { get; set; } = default!;
         public string? ErrorMessage { get; set; } = null;
         public bool IsRegisterSuccess { get; set; } = false;
 
         bool IsPasswordVisible = false;
         InputType PasswordInputType = InputType.Password;
-        string PasswordIcon = Icons.Material.Filled.VisibilityOff;
+        string PasswordIcon = Icons.Material.Sharp.VisibilityOff;
 
         public async Task ValidSubmit()
         {
@@ -21,12 +22,13 @@
                 Email = Email,
                 FullName = FullName,
                 Password = Password,
-                DateOfBirth = DateOfBirth!.Value
+                DateOfBirth = DateTime.SpecifyKind(DateOfBirth!.Value, DateTimeKind.Utc),
+                Role = Role
             };
             
             var client = CreateApiClient();
 
-            var request = await client.PostAsJsonAsync("api/user", newUser);
+            var request = await client.PostAsJsonAsync("api/user/pending", newUser);
             var content = await request.Content.ReadAsStringAsync();
 
             if (request.IsSuccessStatusCode)
@@ -114,6 +116,13 @@
         {
             if (arg is null)
                 return "Date of Birth is required";
+            return null;
+        }
+
+        private string RoleValidity(string arg)
+        {
+            if (string.IsNullOrWhiteSpace(arg))
+                return "Role is required";
             return null;
         }
 

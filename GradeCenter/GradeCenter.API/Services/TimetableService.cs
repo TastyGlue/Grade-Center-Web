@@ -9,7 +9,7 @@
             _context = context;
         }
 
-        public async Task<Response<Guid>> Add(AddTimetableRequest request)
+        public async Task<CustomResult<Guid>> Add(AddTimetableRequest request)
         {
             var classObj = await _context.Classes.FirstOrDefaultAsync(x => x.Id == request.ClassId);
             if (classObj == null)
@@ -55,7 +55,7 @@
             }
         }
 
-        public async Task<Response<string>> Delete(Guid timetableId)
+        public async Task<CustomResult<string>> Delete(Guid timetableId)
         {
             var timetable = await _context.Timetables.FirstOrDefaultAsync(x => x.Id == timetableId);
             if (timetable == null)
@@ -78,7 +78,7 @@
             }
         }
 
-        public async Task<Response<string>> Edit(TimetableDto timetableDto)
+        public async Task<CustomResult<string>> Edit(TimetableDto timetableDto)
         {
             var timetable = await _context.Timetables.FirstOrDefaultAsync(x => x.Id == timetableDto.Id);
             if (timetable == null)

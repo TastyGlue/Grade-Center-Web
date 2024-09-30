@@ -10,7 +10,7 @@ namespace GradeCenter.API.Services
             _context = context;
         }
 
-        public async Task<Response<Guid>> Add(AddSchoolRequest request)
+        public async Task<CustomResult<Guid>> Add(AddSchoolRequest request)
         {
             bool schoolExist = await _context.Schools.AnyAsync(x => x.Name.Equals(request.Name, StringComparison.OrdinalIgnoreCase));
             if (schoolExist)
@@ -46,7 +46,7 @@ namespace GradeCenter.API.Services
             }
         }
 
-        public async Task<Response<string>> Delete(Guid schoolId)
+        public async Task<CustomResult<string>> Delete(Guid schoolId)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace GradeCenter.API.Services
             }
         }
 
-        public async Task<Response<string>> Edit(SchoolDto schoolDto)
+        public async Task<CustomResult<string>> Edit(SchoolDto schoolDto)
         {
             var school = await _context.Schools.Include(x => x.Headmasters).FirstOrDefaultAsync(x => x.Id == schoolDto.Id);
             if (school == null)

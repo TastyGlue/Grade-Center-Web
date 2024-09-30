@@ -9,7 +9,7 @@
             _context = context;
         }
 
-        public async Task<Response<Guid>> Add(AddClassRequest request)
+        public async Task<CustomResult<Guid>> Add(AddClassRequest request)
         {
             var school = await _context.Schools.FirstOrDefaultAsync(x => x.Id == request.SchoolId);
             if (school == null)
@@ -55,7 +55,7 @@
             }
         }
 
-        public async Task<Response<string>> Delete(Guid classId)
+        public async Task<CustomResult<string>> Delete(Guid classId)
         {
             var classObj = await _context.Classes
                 .Include(x => x.Students)
@@ -85,7 +85,7 @@
             }
         }
 
-        public async Task<Response<string>> Edit(ClassDto classDto)
+        public async Task<CustomResult<string>> Edit(ClassDto classDto)
         {
             var classObj = await _context.Classes
                 .Include(x => x.Students)
@@ -143,7 +143,7 @@
             return classObj?.Adapt<ClassDto>();
         }
 
-        private async Task<Response<string>> EditClassStudents(Class classObj, List<StudentDto> newStudents)
+        private async Task<CustomResult<string>> EditClassStudents(Class classObj, List<StudentDto> newStudents)
         {
             try
             {

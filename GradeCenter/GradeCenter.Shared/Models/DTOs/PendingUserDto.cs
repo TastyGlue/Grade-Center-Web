@@ -1,11 +1,13 @@
-﻿namespace GradeCenter.Shared.Models.Requests
+﻿namespace GradeCenter.Shared.Models.DTOs
 {
-    public class AddUserRequest
+    public class PendingUserDto
     {
+        public Guid Id { get; set; }
         public string Email { get; set; } = default!;
         public string FullName { get; set; } = default!;
         public DateTime DateOfBirth { get; set; }
         public string Password { get; set; } = default!;
-        public string? Role { get; set; }
+        public Roles Role { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 }

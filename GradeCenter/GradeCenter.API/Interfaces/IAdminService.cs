@@ -2,8 +2,8 @@
 {
     public interface IAdminService
     {
-        Task<Response<Guid>> AddAdmin(Guid userId);
-        Task<Response<string>> Edit(AdminDto adminDto);
+        Task<CustomResult<Guid>> AddAdmin(Guid userId);
+        Task<CustomResult<string>> Edit(AdminDto adminDto);
         Task<IEnumerable<AdminDto>> GetAll();
         Task<AdminDto?> GetById(Guid id);
     }
