@@ -2,8 +2,6 @@
 {
     public partial class Login : ExtendedComponentBase<Login>
     {
-        [Inject] public ProtectedLocalStorage _localStorage { get; set; } = default!;
-
         public MudForm FormRef { get; set; } = default!;
         public string Email { get; set; } = default!;
         public string Password { get; set; } = default!;
@@ -31,11 +29,10 @@
                     return;
                 }
 
-                // TODO: Add logic for a token with more than one role
-                await _localStorage.SetAsync("accessToken", tokens.AccessToken);
-                await _localStorage.SetAsync("refreshToken", tokens.RefreshToken);
+                string accessTokenBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(tokens.AccessToken));
+                string refreshTokenBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(tokens.RefreshToken));
 
-                NavigationManager.NavigateTo("/", forceLoad: true);
+                NavigationManager.NavigateTo($"/account/role/{accessTokenBase64}/{refreshTokenBase64}");
             }
             else
             {

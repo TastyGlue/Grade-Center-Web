@@ -7,11 +7,13 @@
     {
         private readonly UserManager<User> _userManager;
         private readonly IAuthService _authService;
+        private readonly ITokenService _tokenService;
 
-        public AuthController(UserManager<User> userManager, IAuthService authService)
+        public AuthController(UserManager<User> userManager, IAuthService authService, ITokenService tokenService)
         {
             _userManager = userManager;
             _authService = authService;
+            _tokenService = tokenService;
         }
 
         [HttpPost("login")]
@@ -41,6 +43,31 @@
             try
             {
                 var result = await _authService.Login(user);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("role/{role}")]
+        public async Task<IActionResult> LoginRole(string role)
+        {
+            var authHeader = HttpContext.Request.Headers.Authorization;
+
+            var token = _tokenService.GetTokenContentFromAuthHeader(authHeader);
+            if (token is null)
+                return BadRequest("An unexpected error occurred");
+
+            var user = await _userManager.FindByIdAsync(token.UserId.ToString());
+            if (user is null)
+                return BadRequest("An unexpected error occurred");
+
+            try
+            {
+                var result = await _authService.Login(user, role);
                 return Ok(result);
             }
             catch (Exception ex)

@@ -24,6 +24,13 @@
                 return new() { Succeeded = false, Message = "Couldn't find school" };
 
             // Add user to role
+            var userRole = await _userManager.GetRolesAsync(user);
+            if (userRole.Count > 0)
+            {
+                if (!IsUserParentOnly(userRole))
+                    return new() { Succeeded = false, Message = "User already has a role" };
+            }
+
             var addResult = await _userManager.AddToRoleAsync(user, "TEACHER");
             if (!addResult.Succeeded)
                 return new() { Succeeded = false, Message = "Couldn't add user to \"Teacher\"" };
@@ -143,6 +150,14 @@
             {
                 return new() { Succeeded = false, Message = ex.ToString() };
             }
+        }
+
+        private static bool IsUserParentOnly(IList<string> roles)
+        {
+            if (roles.Count > 1)
+                return false;
+
+            return roles.First().Equals("parent", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

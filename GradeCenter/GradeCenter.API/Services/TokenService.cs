@@ -3,14 +3,12 @@
     public class TokenService : ITokenService
     {
         private readonly IConfiguration _config;
-        private readonly RoleManager<IdentityRole<Guid>> _roleManager;
         private readonly byte[] securityKey;
         private readonly int tokenExpirationInMinutes;
 
-        public TokenService(IConfiguration config, RoleManager<IdentityRole<Guid>> roleManager)
+        public TokenService(IConfiguration config)
         {
             _config = config;
-            _roleManager = roleManager;
 
             // Get values from config file
             securityKey = Encoding.UTF8.GetBytes(_config["JwtSettings:SecurityKey"]!);

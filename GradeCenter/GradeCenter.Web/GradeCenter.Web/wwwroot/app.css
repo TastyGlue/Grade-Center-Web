@@ -43,13 +43,15 @@ h1:focus {
     display: flex;
     flex-direction: row;
     align-items: center;
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: 500;
     color: var(--mud-palette-primary);
     margin-bottom: 1rem;
     border-bottom: 1px solid var(--mud-palette-gray-lighter);
     gap: 0.5rem;
-    padding: 0.5rem;
+    padding: 0.5rem 0;
+    letter-spacing: -0.2rem;
+    line-height: 1;
 }
 
     .anonymous-form-header img{
@@ -60,4 +62,8 @@ h1:focus {
     display: flex;
     align-items: flex-end;
     gap: 1rem;
+}
+
+.roles-list > .mud-list-item {
+    text-align: center;
 }

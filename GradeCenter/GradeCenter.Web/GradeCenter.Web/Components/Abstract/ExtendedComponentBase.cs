@@ -3,8 +3,10 @@
     public class ExtendedComponentBase<T> : ComponentBase
     {
         [Inject] public NavigationManager NavigationManager { get; set; } = default!;
-
+        [Inject] public TokenService TokenService { get; set; } = default!;
+        [Inject] public ProtectedLocalStorage LocalStorage { get; set; } = default!;
         [Inject] public IHttpClientFactory HttpClientFactory { get; set; } = default!;
+        [Inject] public ISnackbar Snackbar { get; set; } = default!;
 
         public JsonSerializerOptions CaseInsensitiveJson
             => new() { PropertyNameCaseInsensitive = true };
@@ -26,15 +28,24 @@
         {
             var dict = new Dictionary<string, string>();
 
-            TextInfo info = CultureInfo.CurrentCulture.TextInfo;
-
             foreach (var item in Enum.GetValues(typeof(TEnum)))
             {
                 string itemString = item.ToString() ?? "";
-                dict.Add(itemString, info.ToTitleCase(itemString.ToLower()));
+                dict.Add(itemString, ToTitleCase(itemString));
             }
 
             return dict;
+        }
+
+        public static string ToTitleCase(string value)
+        {
+            TextInfo info = CultureInfo.CurrentCulture.TextInfo;
+            return info.ToTitleCase(value.ToLower());
+        }
+
+        public void Notify(string message, Severity severity, int duration = 5000)
+        {
+            Snackbar.Add(message, severity, config => { config.VisibleStateDuration = duration; });
         }
     }
 }

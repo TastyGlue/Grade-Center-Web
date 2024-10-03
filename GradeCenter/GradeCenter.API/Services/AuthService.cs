@@ -19,7 +19,7 @@
             refreshTokenExpirationInDays = int.Parse(_config["JwtSettings:RefreshTokenExpirationInDays"]!);
         }
 
-        public async Task<TokensResponse> Login(User user)
+        public async Task<TokensResponse> Login(User user, string? role = null)
         {
             // Remove old tokens for user
             var oldTokens = await _context.RefreshTokens.Where(x => x.UserId == user.Id).ToArrayAsync();
@@ -63,12 +63,15 @@
             return tokens;
         }
 
-        private async Task<TokensResponse> GenerateTokens(User user)
+        private async Task<TokensResponse> GenerateTokens(User user, string? role = null)
         {
             // Get user role
             var roles = await _userManager.GetRolesAsync(user);
             if (roles.Count == 0)
                 throw new Exception("Cannot generate tokens for a user without a role");
+
+            if (role is not null)
+                roles = new List<string> { role };
 
             // Generate tokens
             string accessToken = _tokenService.GenerateAccessToken(user, roles);

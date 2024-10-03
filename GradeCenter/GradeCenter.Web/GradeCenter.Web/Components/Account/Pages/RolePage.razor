@@ -1,0 +1,30 @@
+﻿@page "/account/role/{accessToken}/{refreshToken}"
+@inherits ExtendedComponentBase<RolePage>
+
+@if (IsLoaded)
+{
+    <MudPaper Class="elevation-4 anonymous-form">
+        <div class="anonymous-form-header">
+            <img src="images/logo.png" />
+            <span>YouGrade</span>
+        </div>
+
+        <h1 style="color:var(--mud-palette-primary-darken);">Log in as:</h1>
+
+        <MudList T="string"
+                 @bind-SelectedValue="SelectedRole"
+                 Color="Color.Primary"
+                 Class="roles-list">
+            @foreach (var role in Roles)
+            {
+                <MudListItem Text="@role" />
+            }
+        </MudList>
+
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Button" Color="Color.Dark" OnClick="BackHandler">Back</MudButton>
+            <MudButton ButtonType="ButtonType.Button" Color="Color.Primary" OnClick="ContinueHandler" Disabled="@(string.IsNullOrEmpty(SelectedRole))">Continue</MudButton>
+        </MudCardActions>
+    </MudPaper>
+}
+

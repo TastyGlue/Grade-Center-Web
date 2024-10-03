@@ -28,7 +28,10 @@ namespace GradeCenter.API.Services
             // Add user to role
             var userRole = await _userManager.GetRolesAsync(user);
             if (userRole.Count > 0)
-                return new() { Succeeded = false, Message = "User already has a role" };
+            {
+                if (!IsUserParentOnly(userRole))
+                    return new() { Succeeded = false, Message = "User already has a role" };
+            }
 
             var addResult = await _userManager.AddToRoleAsync(user, "HEADMASTER");
             if (!addResult.Succeeded)
@@ -100,6 +103,14 @@ namespace GradeCenter.API.Services
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             return headmaster?.Adapt<HeadmasterDto>();
+        }
+
+        private static bool IsUserParentOnly(IList<string> roles)
+        {
+            if (roles.Count > 1)
+                return false;
+
+            return roles.First().Equals("parent", StringComparison.OrdinalIgnoreCase);
         }
     }
 }
