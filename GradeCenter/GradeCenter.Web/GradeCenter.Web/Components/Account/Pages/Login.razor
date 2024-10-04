@@ -3,38 +3,45 @@
 
 <PageTitle>Login</PageTitle>
 
-<MudPaper Class="elevation-4 anonymous-form">
-    <div class="anonymous-form-header">
-        <img src="images/logo.png" />
-        <span>YouGrade</span>
-    </div>
-
-    <h1 style="color:var(--mud-palette-primary-darken);">Login</h1>
-
-    <MudForm @ref="FormRef" Class="gap-4" Style="width:100%;">
-        <div class="anonymous-form-field">
-            <MudIcon Icon="@Icons.Material.Sharp.Email" Color="Color.Primary" />
-            <MudTextField @bind-Value="@Email"
-                          Label="Email"
-                          InputType="InputType.Email"
-                          Validation="@(new Func<string, IEnumerable<string>>(EmailValidity))" />
+@if (!isLoginSuccess)
+{
+    <MudPaper Class="elevation-4 anonymous-form">
+        <div class="anonymous-form-header">
+            <img src="images/logo.png" />
+            <span>YouGrade</span>
         </div>
-        
-        <div class="anonymous-form-field">
-            <MudIcon Icon="@Icons.Material.Sharp.Password" Color="Color.Primary" />
-            <MudTextField @bind-Value="@Password"
-                          Label="Password"
-                          InputType="@PasswordInputType"
-                          Adornment="Adornment.End" AdornmentAriaLabel="Password Visibility" AdornmentIcon="@PasswordIcon" AdornmentColor="Color.Primary" OnAdornmentClick="PasswordVisibilityHandler"
-                          Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" />
-        </div>
-        
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false" OnClick="@((e) => LoginClickHandler())">Login</MudButton>
-        <MudLink Href="/account/register">Don't have an account? Click here to sign up</MudLink>
-    </MudForm>
 
-    @if (!string.IsNullOrWhiteSpace(ErrorMessage))
-    {
-        <MudAlert Severity="Severity.Error">@ErrorMessage</MudAlert>
-    }
-</MudPaper>
+        <h1 style="color:var(--mud-palette-primary-darken);">Login</h1>
+
+        <MudForm @ref="FormRef" Class="gap-4" Style="width:100%;">
+            <div class="anonymous-form-field">
+                <MudIcon Icon="@Icons.Material.Sharp.Email" Color="Color.Primary" />
+                <MudTextField @bind-Value="@Email"
+                              Label="Email"
+                              InputType="InputType.Email"
+                              Validation="@(new Func<string, IEnumerable<string>>(EmailValidity))" />
+            </div>
+
+            <div class="anonymous-form-field">
+                <MudIcon Icon="@Icons.Material.Sharp.Password" Color="Color.Primary" />
+                <MudTextField @bind-Value="@Password"
+                              Label="Password"
+                              InputType="@PasswordInputType"
+                              Adornment="Adornment.End" AdornmentAriaLabel="Password Visibility" AdornmentIcon="@PasswordIcon" AdornmentColor="Color.Primary" OnAdornmentClick="PasswordVisibilityHandler"
+                              Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" />
+            </div>
+
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" DropShadow="false" OnClick="@((e) => LoginClickHandler())">Login</MudButton>
+            <MudLink Href="/account/register">Don't have an account? Click here to sign up</MudLink>
+        </MudForm>
+
+        @if (!string.IsNullOrWhiteSpace(ErrorMessage))
+        {
+            <MudAlert Severity="Severity.Error">@ErrorMessage</MudAlert>
+        }
+    </MudPaper>
+}
+else
+{
+    <RolePage AccessToken="@Tokens.AccessToken" RefreshToken="@Tokens.RefreshToken" />
+}

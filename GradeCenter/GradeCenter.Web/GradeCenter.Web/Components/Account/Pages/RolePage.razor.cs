@@ -11,9 +11,6 @@
 
         protected override async Task OnInitializedAsync()
         {
-            AccessToken = Encoding.UTF8.GetString(Convert.FromBase64String(AccessToken));
-            RefreshToken = Encoding.UTF8.GetString(Convert.FromBase64String(RefreshToken));
-
             if (!TokenService.ValidateToken(AccessToken))
                 NavigationManager.NavigateTo("/account/login");
 
@@ -51,7 +48,7 @@
 
                 if (tokens is null)
                 {
-                    string errorMessage = "There occured an application error";
+                    string errorMessage = "An application error occurred";
                     Notify(errorMessage, Severity.Error);
                     NavigationManager.NavigateTo("/account/login");
                     return;
@@ -67,11 +64,6 @@
                 Notify(content, Severity.Error);
                 NavigationManager.NavigateTo("/account/login");
             }
-        }
-
-        private void BackHandler()
-        {
-            NavigationManager.NavigateTo("/account/login");
         }
     }
 }

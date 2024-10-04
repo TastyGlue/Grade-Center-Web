@@ -1,5 +1,4 @@
-﻿@page "/account/role/{accessToken}/{refreshToken}"
-@inherits ExtendedComponentBase<RolePage>
+﻿@inherits ExtendedComponentBase<RolePage>
 
 @if (IsLoaded)
 {
@@ -22,7 +21,6 @@
         </MudList>
 
         <MudCardActions>
-            <MudButton ButtonType="ButtonType.Button" Color="Color.Dark" OnClick="BackHandler">Back</MudButton>
             <MudButton ButtonType="ButtonType.Button" Color="Color.Primary" OnClick="ContinueHandler" Disabled="@(string.IsNullOrEmpty(SelectedRole))">Continue</MudButton>
         </MudCardActions>
     </MudPaper>

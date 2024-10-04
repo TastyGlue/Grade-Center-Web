@@ -11,6 +11,9 @@
         InputType PasswordInputType = InputType.Password;
         string PasswordIcon = Icons.Material.Sharp.VisibilityOff;
 
+        bool isLoginSuccess = false;
+        TokensResponse Tokens = new();
+
         public async Task ValidSubmit()
         {
             var loginRequest = new LoginRequest(Email, Password);
@@ -25,14 +28,13 @@
 
                 if (tokens is null)
                 {
-                    ErrorMessage = "There occured an application error";
+                    ErrorMessage = "An application error occurred";
                     return;
                 }
 
-                string accessTokenBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(tokens.AccessToken));
-                string refreshTokenBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(tokens.RefreshToken));
-
-                NavigationManager.NavigateTo($"/account/role/{accessTokenBase64}/{refreshTokenBase64}");
+                Tokens.AccessToken = tokens.AccessToken;
+                Tokens.RefreshToken = tokens.RefreshToken;
+                isLoginSuccess = true;
             }
             else
             {
