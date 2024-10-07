@@ -233,15 +233,28 @@ namespace GradeCenter.API.Services
             }
         }
 
-        public async Task<CustomResult<string>> DeletePendingUser(Guid id)
+        public async Task<CustomResult<string>> DeletePendingUsers(List<Guid> userIds)
         {
-            var pendingUser = await _context.PendingUsers.FirstOrDefaultAsync(x => x.Id == id);
-            if (pendingUser is null)
-                return new() { Succeeded = false, Message = "Couldn't find pending user" };
+            if (userIds.Count == 0)
+                return new() { Succeeded = false, Message = "Collection cannot be empty" };
+
+            var foundPendingUsers = await _context.PendingUsers.Where(x => userIds.Contains(x.Id)).ToListAsync();
+            var foundPendingUsersIds = foundPendingUsers.Select(x => x.Id);
+
+            if (foundPendingUsers.Count == 0)
+                return new() { Succeeded = false, Message = "No matching pending users were found" };
+
+            var missingIds = userIds.Except(foundPendingUsersIds).ToList();
+            if (missingIds.Count > 0)
+                return new() { Succeeded = false, Message = "1 or more provided Ids were not found" };
 
             try
             {
-                _context.PendingUsers.Remove(pendingUser);
+                foreach (var pendingUser in foundPendingUsers)
+                {
+                    _context.PendingUsers.Remove(pendingUser);
+                }
+                
                 await _context.SaveChangesAsync();
 
                 return new() { Succeeded = true };

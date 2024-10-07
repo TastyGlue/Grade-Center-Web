@@ -13,6 +13,6 @@
         Task<IEnumerable<PendingUserDto>> GetAllPendingUsers();
         Task<PendingUserDto?> GetPendingUser(Guid id);
         Task<CustomResult<string>> EditPendingUser(PendingUserDto dto);
-        Task<CustomResult<string>> DeletePendingUser(Guid id);
+        Task<CustomResult<string>> DeletePendingUsers(List<Guid> userIds);
     }
 }

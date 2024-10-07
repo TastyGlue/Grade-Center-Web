@@ -96,10 +96,10 @@
             return (result.Succeeded) ? Ok() : BadRequest(result.Message);
         }
 
-        [HttpDelete("pending/{id}")]
-        public async Task<IActionResult> DeletePendingUser(Guid id)
+        [HttpPost("pending/delete")]
+        public async Task<IActionResult> DeletePendingUsers([FromBody] List<Guid> userIds)
         {
-            var result = await _userService.DeletePendingUser(id);
+            var result = await _userService.DeletePendingUsers(userIds);
 
             return (result.Succeeded) ? Ok() : BadRequest(result.Message);
         }
