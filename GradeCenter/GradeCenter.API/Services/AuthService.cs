@@ -28,7 +28,7 @@
             await _context.SaveChangesAsync();
 
             // Generate new tokens for user
-            var tokens = await GenerateTokens(user);
+            var tokens = await GenerateTokens(user, role);
             return tokens;
         }
 

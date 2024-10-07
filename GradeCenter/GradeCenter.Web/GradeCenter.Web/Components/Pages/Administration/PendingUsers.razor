@@ -1,0 +1,64 @@
+﻿@page "/pending-users"
+@inherits ExtendedComponentBase<PendingUsers>
+@*Admin only*@
+
+<MudPaper Class="elevation-4">
+    <h1>Pending Users</h1>
+
+    <MudDataGrid T="PendingUserDto"
+                 Items="PendingUsersList"
+                 MultiSelection="true"
+                 @bind-SelectedItems="SelectedPendingUsers"
+                 Filterable="true"
+                 FilterMode="DataGridFilterMode.Simple"
+                 FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive"
+                 QuickFilter="QuickFilter"
+                 ShowMenuIcon="true"
+                 Loading="IsLoading"
+                 LoadingProgressColor="@Color.Secondary"
+                 Hover="true">
+        <ToolBarContent>
+            <MudButton ButtonType="ButtonType.Button"
+                       Variant="Variant.Text"
+                       Color="Color.Success"
+                       StartIcon="@Icons.Material.Sharp.Check"
+                       Class="mr-2"
+                       Disabled="@(SelectedPendingUsers.Count == 0)">Approve</MudButton>
+            <MudButton ButtonType="ButtonType.Button"
+                       Variant="Variant.Text"
+                       Color="Color.Warning"
+                       StartIcon="@Icons.Material.Sharp.Edit"
+                       Class="mr-2"
+                       Disabled="@(SelectedPendingUsers.Count != 1)">Edit</MudButton>
+            <MudButton ButtonType="ButtonType.Button"
+                       Variant="Variant.Text"
+                       Color="Color.Error"
+                       StartIcon="@Icons.Material.Sharp.Close"
+                       Disabled="@(SelectedPendingUsers.Count == 0)">Reject</MudButton>
+            <MudSpacer />
+            <MudTextField @bind-Value="SearchString"
+                          Placeholder="Search..."
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Sharp.Search"
+                          Immediate="true"></MudTextField>
+        </ToolBarContent>
+
+        <Columns>
+            <SelectColumn T="PendingUserDto" />
+            <PropertyColumn Property="x => x.Email" />
+            <PropertyColumn Property="x => x.FullName" Title="Full Name" />
+            <PropertyColumn Property="x => x.DateOfBirth" Title="Date of Birth" Format="dd/MM/yyyy">   
+            </PropertyColumn>
+            <PropertyColumn Property="x => x.Role" />
+            <PropertyColumn Property="x => x.CreatedOn" Title="Created On"/>
+        </Columns>
+
+        <NoRecordsContent>
+            <span>No data to display</span>
+        </NoRecordsContent>
+
+        <PagerContent>
+            <MudDataGridPager T="PendingUserDto" />
+        </PagerContent>
+    </MudDataGrid>
+</MudPaper>

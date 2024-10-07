@@ -3,10 +3,14 @@
     public class TokenService
     {
         private readonly IOptionsMonitor<JwtSettings> _jwtSettingsMonitor;
+        private readonly ProtectedLocalStorage _localStorage;
+        private readonly NavigationManager _navigationManager;
 
-        public TokenService(IOptionsMonitor<JwtSettings> jwtSettingsMonitor)
+        public TokenService(IOptionsMonitor<JwtSettings> jwtSettingsMonitor, ProtectedLocalStorage localStorage, NavigationManager navigationManager)
         {
             _jwtSettingsMonitor = jwtSettingsMonitor;
+            _localStorage = localStorage;
+            _navigationManager = navigationManager;
         }
 
         public bool ValidateToken(string token)
@@ -45,6 +49,18 @@
             var jwtHandler = new JwtSecurityTokenHandler();
             var jwtToken = jwtHandler.ReadJwtToken(token);
             return jwtToken.Claims;
+        }
+
+        public async Task<string> GetToken()
+        {
+            var token = (await _localStorage.GetAsync<string>("accessToken")).Value;
+            if (token is null)
+            {
+                _navigationManager.NavigateTo("/account/login", forceLoad: true);
+                return string.Empty;
+            }
+
+            return token;
         }
     }
 }

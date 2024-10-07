@@ -6,19 +6,26 @@
     public class AuthController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
+        private readonly GradeCenterDbContext _context;
         private readonly IAuthService _authService;
         private readonly ITokenService _tokenService;
 
-        public AuthController(UserManager<User> userManager, IAuthService authService, ITokenService tokenService)
+        public AuthController(UserManager<User> userManager, IAuthService authService, ITokenService tokenService, GradeCenterDbContext context)
         {
             _userManager = userManager;
             _authService = authService;
             _tokenService = tokenService;
+            _context = context;
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<TokensResponse>> Login([FromBody] LoginRequest request)
         {
+            // Check if user is pending
+            var pendingUser = await _context.PendingUsers.FirstOrDefaultAsync(x => x.Email.ToLower() == request.Email.ToLower());
+            if (pendingUser != null)
+                return Unauthorized("Your request is still being reviewed");
+
             // Find user with given email
             var user = await _userManager.FindByEmailAsync(request.Email.ToUpper());
 
@@ -29,7 +36,7 @@
             // Check if user has any roles
             var roles = await _userManager.GetRolesAsync(user);
             if (roles.Count == 0)
-                return Unauthorized("Your register request has not been reviewed yet");
+                return Unauthorized("You don't have access to the system");
 
             // Check if user is active
             if (!user.IsActive)

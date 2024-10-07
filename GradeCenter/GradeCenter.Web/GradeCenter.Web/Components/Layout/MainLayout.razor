@@ -8,10 +8,10 @@
 @if (IsAuthenticated)
 {
     <MudLayout>
-        <MudAppBar Elevation="2">
+        <MudAppBar Elevation="4">
             <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => isDrawerOpen = !isDrawerOpen)" />
         </MudAppBar>
-        <MudDrawer @bind-Open="isDrawerOpen" ClipMode="DrawerClipMode.Docked" Elevation="4">
+        <MudDrawer @bind-Open="isDrawerOpen" ClipMode="DrawerClipMode.Docked" Elevation="8">
             @*NavMenu*@
         </MudDrawer>
         <MudMainContent>

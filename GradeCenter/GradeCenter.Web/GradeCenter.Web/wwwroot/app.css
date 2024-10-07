@@ -67,3 +67,7 @@ h1:focus {
 .roles-list > .mud-list-item {
     text-align: center;
 }
+
+.mud-table-toolbar {
+    flex-wrap: wrap;
+}
