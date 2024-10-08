@@ -20,3 +20,6 @@ global using System.Text.Json;
 global using Mapster;
 global using System.Globalization;
 global using GradeCenter.Shared.Models.DTOs;
+global using GradeCenter.Web.Components.Shared;
+global using Microsoft.JSInterop;
+global using System.Collections.ObjectModel;

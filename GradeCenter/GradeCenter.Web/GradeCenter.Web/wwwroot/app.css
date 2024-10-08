@@ -71,3 +71,15 @@ h1:focus {
 .mud-table-toolbar {
     flex-wrap: wrap;
 }
+
+.custom-data-grid {
+    max-width: 95%;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 3rem;
+}
+
+.custom-data-grid-header {
+    padding: 0.5rem 1rem;
+}

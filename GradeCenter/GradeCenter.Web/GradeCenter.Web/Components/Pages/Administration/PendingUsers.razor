@@ -2,8 +2,8 @@
 @inherits ExtendedComponentBase<PendingUsers>
 @*Admin only*@
 
-<MudPaper Class="elevation-4">
-    <h1>Pending Users</h1>
+<MudPaper Class="custom-data-grid elevation-4">
+    <h1 class="custom-data-grid-header">Pending Users</h1>
 
     <MudDataGrid T="PendingUserDto"
                  Items="PendingUsersList"
@@ -16,14 +16,15 @@
                  ShowMenuIcon="true"
                  Loading="IsLoading"
                  LoadingProgressColor="@Color.Secondary"
-                 Hover="true">
+                 Hover="true"
+                 Style="box-shadow: none !important;">
         <ToolBarContent>
             <MudButton ButtonType="ButtonType.Button"
                        Variant="Variant.Text"
                        Color="Color.Success"
                        StartIcon="@Icons.Material.Sharp.Check"
                        Class="mr-2"
-                       Disabled="@(SelectedPendingUsers.Count == 0)">Approve</MudButton>
+                       Disabled="@(SelectedPendingUsers.Count != 1)">Approve</MudButton>
             <MudButton ButtonType="ButtonType.Button"
                        Variant="Variant.Text"
                        Color="Color.Warning"
@@ -34,6 +35,7 @@
                        Variant="Variant.Text"
                        Color="Color.Error"
                        StartIcon="@Icons.Material.Sharp.Close"
+                       OnClick="RejectHandler"
                        Disabled="@(SelectedPendingUsers.Count == 0)">Reject</MudButton>
             <MudSpacer />
             <MudTextField @bind-Value="SearchString"
@@ -47,10 +49,10 @@
             <SelectColumn T="PendingUserDto" />
             <PropertyColumn Property="x => x.Email" />
             <PropertyColumn Property="x => x.FullName" Title="Full Name" />
-            <PropertyColumn Property="x => x.DateOfBirth" Title="Date of Birth" Format="dd/MM/yyyy">   
+            <PropertyColumn Property="x => x.DateOfBirth.ToLocalTime()" Title="Date of Birth" Format="dd/MM/yyyy">   
             </PropertyColumn>
             <PropertyColumn Property="x => x.Role" />
-            <PropertyColumn Property="x => x.CreatedOn" Title="Created On"/>
+            <PropertyColumn Property="x => x.CreatedOn.ToLocalTime()" Title="Created On" />
         </Columns>
 
         <NoRecordsContent>
